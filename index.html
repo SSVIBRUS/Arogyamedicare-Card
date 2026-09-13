@@ -1,0 +1,2826 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        MEDI-PASS | Medical Memory & Emergency Intelligence
+    </title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        /* =========================================
+           FEATURE DETAIL
+        ========================================= */
+
+        .feature-detail {
+            display: none;
+            padding: 70px 8%;
+            background: #f8fbff;
+        }
+
+        .feature-detail.active {
+            display: block;
+        }
+
+        .feature-detail h2 {
+            margin-bottom: 10px;
+        }
+
+        .feature-detail > p {
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================================
+           DETAIL GRID
+        ========================================= */
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .detail-card {
+            background: white;
+            padding: 22px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            border: 1px solid #e8eef5;
+        }
+
+        .detail-card span {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .detail-card strong {
+            display: block;
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+
+        .detail-card small {
+            color: #777;
+        }
+
+
+        /* =========================================
+           INFO BOX
+        ========================================= */
+
+        .info-box {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            margin-top: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            border: 1px solid #e8eef5;
+        }
+
+        .danger-box {
+            border-left: 5px solid #e53935;
+        }
+
+
+        /* =========================================
+           FORM
+        ========================================= */
+
+        .inline-form {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .inline-form.show {
+            display: block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 7px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 1px solid #d7e0ea;
+            border-radius: 10px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+
+        /* =========================================
+           RECORD ITEM
+        ========================================= */
+
+        .record-item {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 15px;
+            border: 1px solid #e5ebf2;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.04);
+        }
+
+        .record-item h3 {
+            margin-bottom: 8px;
+        }
+
+        .record-item p {
+            margin: 5px 0;
+        }
+
+        .record-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .delete-btn {
+            border: none;
+            padding: 9px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #ffe5e5;
+            color: #c62828;
+        }
+
+
+        /* =========================================
+           TIMELINE
+        ========================================= */
+
+        .timeline-box {
+            margin-top: 20px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 15px 18px;
+            margin-bottom: 12px;
+            background: white;
+            border-radius: 12px;
+            border-left: 4px solid #1976d2;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+
+        /* =========================================
+           STATUS
+        ========================================= */
+
+        .status-good {
+            color: #188038;
+        }
+
+        .status-alert {
+            color: #d93025;
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 700px) {
+
+            .feature-detail {
+                padding: 45px 5%;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        /* =================================================
+           MEDI-PASS HERO VISUAL
+        ================================================= */
+        .hero { position: relative; overflow: hidden; }
+        .hero-visual { position: absolute; width: 53%; height: 560px; right: 1%; top: 50%; transform: translateY(-50%); pointer-events: none; }
+        .hero-visual::before { content: ""; position: absolute; width: 420px; height: 420px; left: 50%; top: 50%; transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(25,118,210,0.14), rgba(25,118,210,0) 68%); filter: blur(5px); }
+        .pulse-glow { position: absolute; width: 300px; height: 300px; left: 50%; top: 50%; transform: translate(-50%, -50%); border-radius: 50%; background: rgba(25,118,210,0.06); box-shadow: 0 0 80px rgba(25,118,210,0.18); animation: mediHubPulse 3.2s ease-in-out infinite; }
+        .ecg-line { position: absolute; left: 0; right: 0; top: 50%; width: 100%; height: 180px; transform: translateY(-50%); opacity: 0.55; overflow: visible; }
+        .ecg-path { fill: none; stroke: #1976d2; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 12 10; animation: mediEcgMove 4s linear infinite; filter: drop-shadow(0 0 6px rgba(25,118,210,0.45)); }
+        .medical-hub { position: absolute; left: 50%; top: 50%; width: 190px; height: 190px; transform: translate(-50%, -50%); }
+        .hub-ring { position: absolute; inset: 0; border: 1px solid rgba(25,118,210,0.22); border-radius: 50%; }
+        .ring-one { animation: mediRingSpin 16s linear infinite; }
+        .ring-two { inset: 14px; border-style: dashed; border-color: rgba(25,118,210,0.28); animation: mediRingSpinReverse 11s linear infinite; }
+        .hub-core { position: absolute; inset: 30px; border-radius: 50%; background: rgba(255,255,255,0.95); border: 1px solid #dbeaf7; box-shadow: 0 18px 50px rgba(25,118,210,0.16), inset 0 0 30px rgba(25,118,210,0.06); display: flex; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        .hub-cross { width: 38px; height: 38px; border-radius: 12px; background: #eef6ff; color: #1976d2; display: grid; place-items: center; font-size: 23px; margin-bottom: 8px; }
+        .hub-core strong { color: #172b4d; font-size: 17px; }
+        .hub-core small { margin-top: 3px; color: #667085; font-size: 11px; }
+        .memory-bubble { position: absolute; min-width: 150px; padding: 11px 13px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(25,118,210,0.15); border-radius: 15px; background: rgba(255,255,255,0.88); box-shadow: 0 12px 32px rgba(25,118,210,0.11); backdrop-filter: blur(10px); animation: mediFloatBubble 5s ease-in-out infinite; }
+        .memory-bubble > span { width: 36px; height: 36px; border-radius: 11px; background: #eef6ff; display: grid; place-items: center; font-size: 18px; flex-shrink: 0; }
+        .memory-bubble strong { display: block; color: #172b4d; font-size: 12px; margin-bottom: 2px; }
+        .memory-bubble small { display: block; color: #667085; font-size: 10px; }
+        .bubble-vitals { left: 3%; top: 20%; animation-delay: -0.4s; }
+        .bubble-medicines { right: 3%; top: 17%; animation-delay: -1.4s; }
+        .bubble-reports { left: 0; bottom: 19%; animation-delay: -2.1s; }
+        .bubble-ai { right: 0; bottom: 22%; animation-delay: -3s; }
+        .bubble-allergy { left: 24%; top: 2%; animation-delay: -1s; }
+        .bubble-emergency { right: 22%; bottom: 2%; animation-delay: -2.5s; }
+        .connection { position: absolute; height: 1px; background: linear-gradient(90deg, rgba(25,118,210,0), rgba(25,118,210,0.30), rgba(25,118,210,0)); transform-origin: left center; opacity: 0.7; }
+        .connection-1 { width: 145px; left: 20%; top: 35%; transform: rotate(16deg); }
+        .connection-2 { width: 145px; left: 64%; top: 35%; transform: rotate(-16deg); }
+        .connection-3 { width: 155px; left: 19%; top: 63%; transform: rotate(-17deg); }
+        .connection-4 { width: 150px; left: 65%; top: 63%; transform: rotate(17deg); }
+        .connection-5 { width: 105px; left: 37%; top: 25%; transform: rotate(75deg); }
+        .connection-6 { width: 105px; left: 56%; top: 74%; transform: rotate(-75deg); }
+        @keyframes mediFloatBubble { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+        @keyframes mediHubPulse { 0%, 100% { transform: translate(-50%, -50%) scale(0.96); opacity: 0.7; } 50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; } }
+        @keyframes mediRingSpin { to { transform: rotate(360deg); } }
+        @keyframes mediRingSpinReverse { to { transform: rotate(-360deg); } }
+        @keyframes mediEcgMove { to { stroke-dashoffset: -180; } }
+        @media (max-width: 900px) { .hero { display: block; } .hero-visual { position: relative; width: 100%; height: 500px; right: auto; top: auto; transform: none; margin-top: 10px; } }
+        @media (max-width: 600px) { .hero-visual { height: 430px; transform: scale(0.86); transform-origin: top center; margin-bottom: -55px; } .memory-bubble { min-width: 132px; padding: 9px 10px; } .memory-bubble > span { width: 31px; height: 31px; font-size: 15px; } .bubble-allergy, .bubble-emergency { display: none; } }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =================================================
+     NAVBAR
+================================================= -->
+
+<header class="navbar">
+
+    <div class="logo">
+        <span>✚</span> MEDI-PASS
+    </div>
+
+    <nav>
+
+        <a href="#home">
+            Home
+        </a>
+
+        <a href="#dashboard">
+            Dashboard
+        </a>
+
+        <a href="#dashboard">
+            Features
+        </a>
+
+    </nav>
+
+
+
+
+
+
+    -
+
+    <a href="./login.html" class="login-btn">
+        Login
+    </a>
+
+</header>
+
+
+
+<!-- =================================================
+     HERO
+================================================= -->
+
+<section
+    class="hero"
+    id="home">
+
+    <div class="hero-content">
+
+        <div class="badge">
+            🛡️ Secure Medical Memory
+        </div>
+
+        <h1>
+
+            Smarter Medical Memory,
+
+            <span>
+                Faster Emergency Care.
+            </span>
+
+        </h1>
+
+        <p>
+
+            MEDI-PASS securely stores your medical history,
+            medicines, allergies, reports and emergency
+            information in one easy-to-access place.
+
+        </p>
+
+       <div class="hero-buttons">
+            <a href="./register.html" class="primary-btn">Get Started</a>
+        </div>
+
+    </div>
+
+    <!-- RIGHT SIDE MEDICAL VISUAL -->
+    <div class="hero-visual">
+        <div class="pulse-glow"></div>
+
+        <svg class="ecg-line" viewBox="0 0 700 300" preserveAspectRatio="none" aria-hidden="true">
+            <path class="ecg-path" d="M0 165 H105 L125 165 L143 158 L160 165 H215 L230 165 L248 165 L265 125 L282 205 L300 165 H365 L382 165 L398 150 L414 165 H470 L492 165 L510 165 L528 138 L545 192 L562 165 H700" />
+        </svg>
+
+        <div class="connection connection-1"></div>
+        <div class="connection connection-2"></div>
+        <div class="connection connection-3"></div>
+        <div class="connection connection-4"></div>
+        <div class="connection connection-5"></div>
+        <div class="connection connection-6"></div>
+
+        <div class="medical-hub">
+            <div class="hub-ring ring-one"></div>
+            <div class="hub-ring ring-two"></div>
+            <div class="hub-core">
+                <div class="hub-cross">✚</div>
+                <strong>MEDI-PASS</strong>
+                <small>Medical Memory</small>
+            </div>
+        </div>
+
+        <div class="memory-bubble bubble-vitals"><span>❤️</span><div><strong>Health Vitals</strong><small>Live health data</small></div></div>
+        <div class="memory-bubble bubble-medicines"><span>💊</span><div><strong>Medicines</strong><small>Medication memory</small></div></div>
+        <div class="memory-bubble bubble-reports"><span>📄</span><div><strong>Medical Reports</strong><small>Health records</small></div></div>
+        <div class="memory-bubble bubble-ai"><span>🧠</span><div><strong>AI Memory</strong><small>Smart health timeline</small></div></div>
+        <div class="memory-bubble bubble-allergy"><span>⚠️</span><div><strong>Allergies</strong><small>Critical alerts</small></div></div>
+        <div class="memory-bubble bubble-emergency"><span>🚨</span><div><strong>Emergency</strong><small>Ready when needed</small></div></div>
+    </div>
+
+</section>
+
+
+
+<!-- =================================================
+     FEATURES / DASHBOARD
+================================================= -->
+
+<section
+    class="features"
+    id="dashboard">
+
+    <div class="section-heading">
+
+        <span>
+            MEDICAL DASHBOARD
+        </span>
+
+        <h2>
+
+            Your health information,
+            all in one place.
+
+        </h2>
+
+    </div>
+
+
+    <div class="feature-grid">
+
+
+        <!-- HEALTH VITALS -->
+
+        <div
+            class="feature-card"
+            onclick="showFeature('healthVitals')">
+
+            <div class="icon">
+                ❤️
+            </div>
+
+            <h3>
+                Health Vitals
+            </h3>
+
+            <p>
+                Monitor blood pressure, heart rate,
+                SpO₂, sugar and other important vitals.
+            </p>
+
+        </div>
+
+
+        <!-- MEDICINES -->
+
+        <div
+            class="feature-card"
+            onclick="showFeature('medicines')">
+
+            <div class="icon">
+                💊
+            </div>
+
+            <h3>
+                Medicines
+            </h3>
+
+            <p>
+                Keep track of current medicines,
+                dosage and frequency.
+            </p>
+
+        </div>
+
+
+        <!-- REPORTS -->
+
+        <div
+            class="feature-card"
+            onclick="showFeature('reports')">
+
+            <div class="icon">
+                📄
+            </div>
+
+            <h3>
+                Medical Reports
+            </h3>
+
+            <p>
+                Store prescriptions, tests and
+                medical report information.
+            </p>
+
+        </div>
+
+
+        <!-- AI MEMORY -->
+
+        <div
+            class="feature-card"
+            onclick="showFeature('aiMemory')">
+
+            <div class="icon">
+                🧠
+            </div>
+
+            <h3>
+                AI Health Memory
+            </h3>
+
+            <p>
+                Organize your saved medical information
+                into a simple health memory.
+            </p>
+
+        </div>
+
+
+        <!-- ALLERGIES -->
+
+        <div
+            class="feature-card"
+            onclick="showFeature('allergies')">
+
+            <div class="icon">
+                ⚠️
+            </div>
+
+            <h3>
+                Allergies & Alerts
+            </h3>
+
+            <p>
+                Keep critical allergies and important
+                medical alerts visible.
+            </p>
+
+        </div>
+
+
+        <!-- DOCTOR -->
+
+        <div
+            class="feature-card"
+            onclick="showFeature('doctor')">
+
+            <div class="icon">
+                🩺
+            </div>
+
+            <h3>
+                Doctor Access
+            </h3>
+
+            <p>
+                Share selected medical information
+                with your doctor.
+            </p>
+
+        </div>
+
+
+        <!-- TIMELINE -->
+
+        <div
+            class="feature-card"
+            onclick="showFeature('timeline')">
+
+            <div class="icon">
+                📅
+            </div>
+
+            <h3>
+                Medical Timeline
+            </h3>
+
+            <p>
+                View important medical events
+                chronologically.
+            </p>
+
+        </div>
+
+
+        <!-- FAMILY -->
+
+        <div
+            class="feature-card"
+            onclick="showFeature('family')">
+
+            <div class="icon">
+                👨‍👩‍👧
+            </div>
+
+            <h3>
+                Family Profiles
+            </h3>
+
+            <p>
+                Maintain separate health profiles
+                for family members.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =================================================
+     HEALTH VITALS
+================================================= -->
+
+<section
+    class="feature-detail"
+    id="healthVitals">
+
+    <div class="section-heading">
+
+        <span>
+            ❤️ HEALTH VITALS
+        </span>
+
+        <h2>
+            Your Health Vitals
+        </h2>
+
+    </div>
+
+    <div class="detail-grid">
+
+        <div class="detail-card">
+
+            <span>
+                🩸 Blood Pressure
+            </span>
+
+            <strong id="detailBP">
+                --
+            </strong>
+
+            <small>
+                From patient profile
+            </small>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <span>
+                💓 Heart Rate
+            </span>
+
+            <strong id="detailHR">
+                --
+            </strong>
+
+            <small>
+                BPM
+            </small>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <span>
+                🫁 SpO₂
+            </span>
+
+            <strong id="detailSpO2">
+                --
+            </strong>
+
+            <small>
+                Oxygen saturation
+            </small>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <span>
+                🩸 Blood Sugar
+            </span>
+
+            <strong id="detailSugar">
+                --
+            </strong>
+
+            <small>
+                Recorded value
+            </small>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <span>
+                📏 Height
+            </span>
+
+            <strong id="detailHeight">
+                --
+            </strong>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <span>
+                ⚖️ Weight
+            </span>
+
+            <strong id="detailWeight">
+                --
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="info-box">
+
+        <h3>
+            💡 Vital Information
+        </h3>
+
+        <p>
+            These values are read from the patient profile
+            saved during registration.
+        </p>
+
+        <a
+            href="./register.html"
+            class="primary-btn">
+
+            ✏️ Update Vitals
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =================================================
+     MEDICINES
+================================================= -->
+
+<section
+    class="feature-detail"
+    id="medicines">
+
+    <div class="section-heading">
+
+        <span>
+            💊 MEDICINE MANAGEMENT
+        </span>
+
+        <h2>
+            Medicines
+        </h2>
+
+    </div>
+
+
+    <button
+        class="primary-btn"
+        onclick="toggleForm('medicineForm')">
+
+        ➕ Add Medicine
+
+    </button>
+
+
+    <div
+        class="info-box inline-form"
+        id="medicineForm">
+
+        <h3>
+            Add Medicine
+        </h3>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Medicine Name
+                </label>
+
+                <input
+                    id="medicineName"
+                    type="text"
+                    placeholder="e.g. Paracetamol">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Dosage
+                </label>
+
+                <input
+                    id="medicineDosage"
+                    type="text"
+                    placeholder="e.g. 500 mg">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Frequency
+                </label>
+
+                <input
+                    id="medicineFrequency"
+                    type="text"
+                    placeholder="e.g. Twice a day">
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="primary-btn"
+            onclick="saveMedicine()">
+
+            💾 Save Medicine
+
+        </button>
+
+    </div>
+
+
+    <div id="medicineList"></div>
+
+</section>
+
+
+
+<!-- =================================================
+     REPORTS
+================================================= -->
+
+<section
+    class="feature-detail"
+    id="reports">
+
+    <div class="section-heading">
+
+        <span>
+            📄 MEDICAL DOCUMENTS
+        </span>
+
+        <h2>
+            Medical Reports
+        </h2>
+
+    </div>
+
+
+    <button
+        class="primary-btn"
+        onclick="toggleForm('reportForm')">
+
+        ➕ Add Report
+
+    </button>
+
+
+    <div
+        class="info-box inline-form"
+        id="reportForm">
+
+        <h3>
+            Add Medical Report
+        </h3>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Report Name
+                </label>
+
+                <input
+                    id="reportName"
+                    type="text"
+                    placeholder="e.g. Blood Test">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Report Date
+                </label>
+
+                <input
+                    id="reportDate"
+                    type="date">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Notes
+                </label>
+
+                <textarea
+                    id="reportNotes"
+                    placeholder="Report details"></textarea>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="primary-btn"
+            onclick="saveReport()">
+
+            💾 Save Report
+
+        </button>
+
+    </div>
+
+
+    <div id="reportList"></div>
+
+</section>
+
+
+
+<!-- =================================================
+     AI HEALTH MEMORY
+================================================= -->
+
+<section
+    class="feature-detail"
+    id="aiMemory">
+
+    <div class="section-heading">
+
+        <span>
+            🧠 MEDICAL INTELLIGENCE
+        </span>
+
+        <h2>
+            AI Health Memory
+        </h2>
+
+    </div>
+
+
+    <div class="info-box">
+
+        <h3>
+            🤖 Health Memory Summary
+        </h3>
+
+        <p id="aiMemorySummary">
+
+            Analyzing saved medical information...
+
+        </p>
+
+    </div>
+
+
+    <div class="detail-grid">
+
+        <div class="detail-card">
+
+            <span>
+                ❤️ Health Vitals
+            </span>
+
+            <strong id="aiVitalsStatus">
+                --
+            </strong>
+
+            <small>
+                Profile information
+            </small>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <span>
+                💊 Medicines
+            </span>
+
+            <strong id="aiMedicineCount">
+                0
+            </strong>
+
+            <small>
+                Saved records
+            </small>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <span>
+                📄 Reports
+            </span>
+
+            <strong id="aiReportCount">
+                0
+            </strong>
+
+            <small>
+                Saved records
+            </small>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <span>
+                ⚠️ Allergy
+            </span>
+
+            <strong id="aiAllergyStatus">
+                Not Recorded
+            </strong>
+
+            <small>
+                Important alert
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="info-box">
+
+        <h3>
+            📅 Medical Memory Timeline
+        </h3>
+
+        <div
+            id="aiMemoryTimeline"
+            class="timeline-box">
+        </div>
+
+    </div>
+
+
+    <button
+        class="primary-btn"
+        onclick="generateAIMemory()">
+
+        🔄 Refresh Health Memory
+
+    </button>
+
+</section>
+
+
+
+<!-- =================================================
+     ALLERGIES
+================================================= -->
+
+<section
+    class="feature-detail"
+    id="allergies">
+
+    <div class="section-heading">
+
+        <span>
+            ⚠️ MEDICAL ALERT
+        </span>
+
+        <h2>
+            Allergies & Alerts
+        </h2>
+
+    </div>
+
+
+    <div class="detail-grid">
+
+        <div class="detail-card">
+
+            <span>
+                ⚠️ Allergy Status
+            </span>
+
+            <strong id="allergyStatus">
+                Not Recorded
+            </strong>
+
+            <small>
+                From patient profile
+            </small>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <span>
+                🚨 Emergency Alert
+            </span>
+
+            <strong id="allergyEmergencyStatus">
+                No Alert
+            </strong>
+
+            <small>
+                Emergency visibility
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="info-box danger-box">
+
+        <h3>
+            🚨 Critical Allergy Information
+        </h3>
+
+        <p id="detailAllergy">
+            No allergy recorded
+        </p>
+
+        <small>
+            This information is taken from the saved
+            patient profile.
+        </small>
+
+    </div>
+
+
+    <div class="info-box">
+
+        <h3>
+            🛡️ Allergy Safety Note
+        </h3>
+
+        <p>
+            Keeping allergy information visible can help
+            healthcare professionals quickly review
+            important recorded alerts.
+        </p>
+
+        <a
+            href="./register.html"
+            class="primary-btn">
+
+            ✏️ Update Allergy Information
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =================================================
+     DOCTOR ACCESS
+================================================= -->
+
+<section
+    class="feature-detail"
+    id="doctor">
+
+    <div class="section-heading">
+
+        <span>
+            🩺 HEALTHCARE ACCESS
+        </span>
+
+        <h2>
+            Doctor Access
+        </h2>
+
+    </div>
+
+
+    <div class="info-box">
+
+        <h3>
+            👨‍⚕️ Share Medical Information
+        </h3>
+
+        <p>
+            Select the information that you want to make
+            available for a doctor review.
+        </p>
+
+    </div>
+
+
+    <div class="detail-grid">
+
+        <div class="detail-card">
+
+            <span>
+                ❤️ Health Vitals
+            </span>
+
+            <strong>
+                Available
+            </strong>
+
+            <small>
+                Patient profile
+            </small>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <span>
+                💊 Medicines
+            </span>
+
+            <strong id="doctorMedicineCount">
+                0
+            </strong>
+
+            <small>
+                Saved medicines
+            </small>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <span>
+                📄 Reports
+            </span>
+
+            <strong id="doctorReportCount">
+                0
+            </strong>
+
+            <small>
+                Saved reports
+            </small>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <span>
+                ⚠️ Allergies
+            </span>
+
+            <strong>
+                Critical
+            </strong>
+
+            <small>
+                Emergency information
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="info-box">
+
+        <h3>
+            🔐 Doctor Access Request
+        </h3>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Doctor Name
+                </label>
+
+                <input
+                    id="doctorName"
+                    type="text"
+                    placeholder="Enter doctor name">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Hospital / Clinic
+                </label>
+
+                <input
+                    id="doctorHospital"
+                    type="text"
+                    placeholder="Hospital or clinic">
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="primary-btn"
+            onclick="requestDoctorAccess()">
+
+            🔐 Request Access
+
+        </button>
+
+
+        <p
+            id="doctorAccessStatus"
+            style="margin-top:15px;">
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =================================================
+     TIMELINE
+================================================= -->
+
+<section
+    class="feature-detail"
+    id="timeline">
+
+    <div class="section-heading">
+
+        <span>
+            📅 MEDICAL JOURNEY
+        </span>
+
+        <h2>
+            Medical Timeline
+        </h2>
+
+    </div>
+
+
+    <div
+        id="mainTimeline"
+        class="timeline-box">
+    </div>
+
+</section>
+
+
+
+<!-- =================================================
+     FAMILY
+================================================= -->
+
+<section
+    class="feature-detail"
+    id="family">
+
+    <div class="section-heading">
+
+        <span>
+            👨‍👩‍👧 FAMILY HEALTH
+        </span>
+
+        <h2>
+            Family Profiles
+        </h2>
+
+    </div>
+
+
+    <button
+        class="primary-btn"
+        onclick="toggleForm('familyForm')">
+
+        ➕ Add Family Member
+
+    </button>
+
+
+    <div
+        class="info-box inline-form"
+        id="familyForm">
+
+        <h3>
+            Add Family Member
+        </h3>
+
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Name
+                </label>
+
+                <input
+                    id="familyName"
+                    type="text"
+                    placeholder="Family member name">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Relation
+                </label>
+
+                <input
+                    id="familyRelation"
+                    type="text"
+                    placeholder="e.g. Mother">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Blood Group
+                </label>
+
+                <input
+                    id="familyBlood"
+                    type="text"
+                    placeholder="e.g. B+">
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="primary-btn"
+            onclick="saveFamilyMember()">
+
+            💾 Save Family Member
+
+        </button>
+
+    </div>
+
+
+    <div id="familyList"></div>
+
+</section>
+
+
+
+<!-- =================================================
+     FOOTER
+================================================= -->
+
+<footer>
+
+    <div class="logo">
+
+        <span>
+            ✚
+        </span>
+
+        MEDI-PASS
+
+    </div>
+
+
+    <p>
+        Medical Memory & Emergency Intelligence
+    </p>
+
+
+    <small>
+        Your medical history shouldn't depend on your memory.
+    </small>
+
+</footer>
+
+
+
+<!-- =================================================
+     JAVASCRIPT
+================================================= -->
+
+<script src="script.js"></script>
+
+<script>
+
+let patientData =
+    JSON.parse(
+        localStorage.getItem("mediPassPatient")
+    ) || {};
+
+
+function getPatient() {
+
+    return JSON.parse(
+        localStorage.getItem("mediPassPatient")
+    ) || {};
+
+}
+
+
+function safe(value, fallback = "--") {
+
+    if (
+        value === undefined ||
+        value === null ||
+        String(value).trim() === ""
+    ) {
+
+        return fallback;
+
+    }
+
+    return String(value).trim();
+
+}
+
+
+function setText(id, value) {
+
+    const element =
+        document.getElementById(id);
+
+    if (element) {
+
+        element.textContent =
+            value;
+
+    }
+
+}
+
+
+function showFeature(featureId) {
+
+    document
+        .querySelectorAll(".feature-detail")
+        .forEach(function(section) {
+
+            section.classList.remove("active");
+
+            section.style.display = "none";
+
+        });
+
+
+    const selected =
+        document.getElementById(featureId);
+
+
+    if (!selected) {
+        return;
+    }
+
+
+    selected.classList.add("active");
+
+    selected.style.display = "block";
+
+
+    if (featureId === "medicines") {
+        renderMedicines();
+    }
+
+    if (featureId === "reports") {
+        renderReports();
+    }
+
+    if (featureId === "family") {
+        renderFamilyMembers();
+    }
+
+    if (featureId === "aiMemory") {
+        generateAIMemory();
+    }
+
+    if (featureId === "allergies") {
+        updateAllergy();
+    }
+
+    if (featureId === "timeline") {
+        renderTimeline();
+    }
+
+    if (featureId === "doctor") {
+        updateDoctorCounts();
+    }
+
+
+    setTimeout(function() {
+
+        selected.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }, 50);
+
+}
+
+
+function toggleForm(id) {
+
+    const form =
+        document.getElementById(id);
+
+    if (!form) {
+        return;
+    }
+
+    form.classList.toggle("show");
+
+}
+
+
+function getMedicines() {
+
+    return JSON.parse(
+        localStorage.getItem("mediPassMedicines")
+    ) || [];
+
+}
+
+
+function saveMedicine() {
+
+    const name =
+        document.getElementById("medicineName")
+        .value.trim();
+
+    const dosage =
+        document.getElementById("medicineDosage")
+        .value.trim();
+
+    const frequency =
+        document.getElementById("medicineFrequency")
+        .value.trim();
+
+
+    if (!name) {
+        document.getElementById("medicineName").focus();
+        return;
+    }
+
+
+    const medicines =
+        getMedicines();
+
+
+    medicines.push({
+
+        name: name,
+
+        dosage:
+            dosage || "Not specified",
+
+        frequency:
+            frequency || "Not specified",
+
+        createdAt:
+            new Date().toISOString()
+
+    });
+
+
+    localStorage.setItem(
+        "mediPassMedicines",
+        JSON.stringify(medicines)
+    );
+
+
+    document.getElementById("medicineName").value = "";
+    document.getElementById("medicineDosage").value = "";
+    document.getElementById("medicineFrequency").value = "";
+
+    document
+        .getElementById("medicineForm")
+        .classList.remove("show");
+
+
+    renderMedicines();
+
+}
+
+
+function renderMedicines() {
+
+    const list =
+        document.getElementById("medicineList");
+
+    if (!list) {
+        return;
+    }
+
+
+    const medicines =
+        getMedicines();
+
+
+    if (medicines.length === 0) {
+
+        list.innerHTML = `
+
+            <div class="info-box">
+
+                <h3>
+                    💊 No Medicines Yet
+                </h3>
+
+                <p>
+                    Add your current medicine information
+                    using the button above.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    medicines.forEach(function(medicine, index) {
+
+        const item =
+            document.createElement("div");
+
+        item.className = "record-item";
+
+
+        item.innerHTML = `
+
+            <h3>
+                💊 ${escapeHTML(medicine.name)}
+            </h3>
+
+            <p>
+                <strong>Dosage:</strong>
+                ${escapeHTML(medicine.dosage)}
+            </p>
+
+            <p>
+                <strong>Frequency:</strong>
+                ${escapeHTML(medicine.frequency)}
+            </p>
+
+            <div class="record-actions">
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteMedicine(${index})">
+
+                    🗑️ Delete
+
+                </button>
+
+            </div>
+
+        `;
+
+
+        list.appendChild(item);
+
+    });
+
+}
+
+
+function deleteMedicine(index) {
+
+    const medicines =
+        getMedicines();
+
+
+    medicines.splice(index, 1);
+
+
+    localStorage.setItem(
+        "mediPassMedicines",
+        JSON.stringify(medicines)
+    );
+
+
+    renderMedicines();
+
+}
+
+
+function getReports() {
+
+    return JSON.parse(
+        localStorage.getItem("mediPassReports")
+    ) || [];
+
+}
+
+
+function saveReport() {
+
+    const name =
+        document.getElementById("reportName")
+        .value.trim();
+
+    const date =
+        document.getElementById("reportDate")
+        .value;
+
+    const notes =
+        document.getElementById("reportNotes")
+        .value.trim();
+
+
+    if (!name) {
+
+        document.getElementById("reportName").focus();
+
+        return;
+
+    }
+
+
+    const reports =
+        getReports();
+
+
+    reports.push({
+
+        name: name,
+
+        date:
+            date || "Not specified",
+
+        notes:
+            notes || "No notes added",
+
+        createdAt:
+            new Date().toISOString()
+
+    });
+
+
+    localStorage.setItem(
+        "mediPassReports",
+        JSON.stringify(reports)
+    );
+
+
+    document.getElementById("reportName").value = "";
+    document.getElementById("reportDate").value = "";
+    document.getElementById("reportNotes").value = "";
+
+    document
+        .getElementById("reportForm")
+        .classList.remove("show");
+
+
+    renderReports();
+
+}
+
+
+function renderReports() {
+
+    const list =
+        document.getElementById("reportList");
+
+    if (!list) {
+        return;
+    }
+
+
+    const reports =
+        getReports();
+
+
+    if (reports.length === 0) {
+
+        list.innerHTML = `
+
+            <div class="info-box">
+
+                <h3>
+                    📄 No Reports Yet
+                </h3>
+
+                <p>
+                    Add your medical report information
+                    using the button above.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    reports.forEach(function(report, index) {
+
+        const item =
+            document.createElement("div");
+
+        item.className = "record-item";
+
+
+        item.innerHTML = `
+
+            <h3>
+                📄 ${escapeHTML(report.name)}
+            </h3>
+
+            <p>
+                <strong>Date:</strong>
+                ${escapeHTML(report.date)}
+            </p>
+
+            <p>
+                ${escapeHTML(report.notes)}
+            </p>
+
+            <div class="record-actions">
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteReport(${index})">
+
+                    🗑️ Delete
+
+                </button>
+
+            </div>
+
+        `;
+
+
+        list.appendChild(item);
+
+    });
+
+}
+
+
+function deleteReport(index) {
+
+    const reports =
+        getReports();
+
+
+    reports.splice(index, 1);
+
+
+    localStorage.setItem(
+        "mediPassReports",
+        JSON.stringify(reports)
+    );
+
+
+    renderReports();
+
+}
+
+
+function updateAllergy() {
+
+    const patient =
+        getPatient();
+
+
+    const allergy =
+        patient.allergies &&
+        patient.allergies.trim()
+            ? patient.allergies.trim()
+            : "";
+
+
+    const status =
+        document.getElementById("allergyStatus");
+
+    const emergencyStatus =
+        document.getElementById("allergyEmergencyStatus");
+
+    const detail =
+        document.getElementById("detailAllergy");
+
+
+    if (allergy) {
+
+        if (status) {
+
+            status.textContent =
+                "Recorded";
+
+            status.className =
+                "status-alert";
+
+        }
+
+
+        if (emergencyStatus) {
+
+            emergencyStatus.textContent =
+                "Alert Active";
+
+            emergencyStatus.className =
+                "status-alert";
+
+        }
+
+
+        if (detail) {
+
+            detail.textContent =
+                allergy;
+
+        }
+
+    }
+    else {
+
+        if (status) {
+
+            status.textContent =
+                "Not Recorded";
+
+            status.className = "";
+
+        }
+
+
+        if (emergencyStatus) {
+
+            emergencyStatus.textContent =
+                "No Alert";
+
+            emergencyStatus.className = "";
+
+        }
+
+
+        if (detail) {
+
+            detail.textContent =
+                "No allergy recorded";
+
+        }
+
+    }
+
+}
+
+
+function generateAIMemory() {
+
+    const patient =
+        getPatient();
+
+    const medicines =
+        getMedicines();
+
+    const reports =
+        getReports();
+
+
+    const summary =
+        document.getElementById("aiMemorySummary");
+
+
+    const timeline =
+        document.getElementById("aiMemoryTimeline");
+
+
+    const vitalsStatus =
+        document.getElementById("aiVitalsStatus");
+
+
+    const medicineCount =
+        document.getElementById("aiMedicineCount");
+
+
+    const reportCount =
+        document.getElementById("aiReportCount");
+
+
+    const allergyStatus =
+        document.getElementById("aiAllergyStatus");
+
+
+    const hasVitals =
+        Boolean(
+            patient.bloodPressure ||
+            patient.heartRate ||
+            patient.spo2 ||
+            patient.bloodSugar ||
+            patient.height ||
+            patient.weight
+        );
+
+
+    const allergy =
+        patient.allergies &&
+        patient.allergies.trim()
+            ? patient.allergies.trim()
+            : "";
+
+
+    if (vitalsStatus) {
+
+        vitalsStatus.textContent =
+            hasVitals
+                ? "Available"
+                : "Not Available";
+
+    }
+
+
+    if (medicineCount) {
+
+        medicineCount.textContent =
+            medicines.length;
+
+    }
+
+
+    if (reportCount) {
+
+        reportCount.textContent =
+            reports.length;
+
+    }
+
+
+    if (allergyStatus) {
+
+        allergyStatus.textContent =
+            allergy || "Not Recorded";
+
+    }
+
+
+    if (summary) {
+
+        let text =
+            patient.name
+                ? `${patient.name}'s medical memory contains saved patient information`
+                : "Patient profile information is not available";
+
+
+        if (hasVitals) {
+            text += ", health vitals";
+        }
+
+
+        if (medicines.length) {
+
+            text +=
+                `, ${medicines.length} medicine record${medicines.length > 1 ? "s" : ""}`;
+
+        }
+
+
+        if (reports.length) {
+
+            text +=
+                `, ${reports.length} medical report${reports.length > 1 ? "s" : ""}`;
+
+        }
+
+
+        if (allergy) {
+
+            text +=
+                ". An allergy alert is recorded and should remain visible during emergencies.";
+
+        }
+        else {
+
+            text +=
+                ". No allergy has been recorded.";
+
+        }
+
+
+        summary.textContent =
+            text +
+            " This memory organizes saved records and does not provide a diagnosis.";
+
+    }
+
+
+    if (timeline) {
+
+        let html = "";
+
+
+        if (patient.name) {
+
+            html += `
+
+                <div class="timeline-item">
+
+                    📋 Patient profile information saved
+
+                </div>
+
+            `;
+
+        }
+
+
+        if (hasVitals) {
+
+            html += `
+
+                <div class="timeline-item">
+
+                    ❤️ Health vitals available
+
+                </div>
+
+            `;
+
+        }
+
+
+        if (medicines.length) {
+
+            html += `
+
+                <div class="timeline-item">
+
+                    💊 ${medicines.length}
+                    medicine record${medicines.length > 1 ? "s" : ""}
+                    available
+
+                </div>
+
+            `;
+
+        }
+
+
+        if (reports.length) {
+
+            html += `
+
+                <div class="timeline-item">
+
+                    📄 ${reports.length}
+                    medical report${reports.length > 1 ? "s" : ""}
+                    stored
+
+                </div>
+
+            `;
+
+        }
+
+
+        if (allergy) {
+
+            html += `
+
+                <div class="timeline-item">
+
+                    ⚠️ Allergy alert recorded
+
+                </div>
+
+            `;
+
+        }
+
+
+        if (!html) {
+
+            html = `
+
+                <div class="timeline-item">
+
+                    📭 No medical information available yet.
+
+                </div>
+
+            `;
+
+        }
+
+
+        timeline.innerHTML =
+            html;
+
+    }
+
+
+    updateDoctorCounts();
+
+}
+
+
+function updateDoctorCounts() {
+
+    const medicines =
+        getMedicines();
+
+    const reports =
+        getReports();
+
+
+    setText(
+        "doctorMedicineCount",
+        medicines.length
+    );
+
+
+    setText(
+        "doctorReportCount",
+        reports.length
+    );
+
+}
+
+
+function requestDoctorAccess() {
+
+    const doctor =
+        document.getElementById("doctorName")
+        .value.trim();
+
+
+    const hospital =
+        document.getElementById("doctorHospital")
+        .value.trim();
+
+
+    const status =
+        document.getElementById("doctorAccessStatus");
+
+
+    if (!doctor) {
+
+        if (status) {
+
+            status.textContent =
+                "Please enter the doctor's name.";
+
+            status.className =
+                "status-alert";
+
+        }
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "mediPassDoctorRequest",
+        JSON.stringify({
+
+            doctor: doctor,
+
+            hospital:
+                hospital || "Not specified",
+
+            requestedAt:
+                new Date().toISOString()
+
+        })
+    );
+
+
+    if (status) {
+
+        status.textContent =
+            "✓ Doctor access request recorded for this prototype.";
+
+        status.className =
+            "status-good";
+
+    }
+
+}
+
+
+function getFamilyMembers() {
+
+    return JSON.parse(
+        localStorage.getItem("mediPassFamily")
+    ) || [];
+
+}
+
+
+function saveFamilyMember() {
+
+    const name =
+        document.getElementById("familyName")
+        .value.trim();
+
+
+    const relation =
+        document.getElementById("familyRelation")
+        .value.trim();
+
+
+    const blood =
+        document.getElementById("familyBlood")
+        .value.trim();
+
+
+    if (!name) {
+
+        document.getElementById("familyName").focus();
+
+        return;
+
+    }
+
+
+    const family =
+        getFamilyMembers();
+
+
+    family.push({
+
+        name: name,
+
+        relation:
+            relation || "Not specified",
+
+        blood:
+            blood || "Not specified"
+
+    });
+
+
+    localStorage.setItem(
+        "mediPassFamily",
+        JSON.stringify(family)
+    );
+
+
+    document.getElementById("familyName").value = "";
+    document.getElementById("familyRelation").value = "";
+    document.getElementById("familyBlood").value = "";
+
+
+    document
+        .getElementById("familyForm")
+        .classList.remove("show");
+
+
+    renderFamilyMembers();
+
+}
+
+
+function renderFamilyMembers() {
+
+    const list =
+        document.getElementById("familyList");
+
+
+    if (!list) {
+        return;
+    }
+
+
+    const family =
+        getFamilyMembers();
+
+
+    if (family.length === 0) {
+
+        list.innerHTML = `
+
+            <div class="info-box">
+
+                <h3>
+                    👨‍👩‍👧 No Family Profiles Yet
+                </h3>
+
+                <p>
+                    Add a family member to maintain
+                    a separate health profile.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    family.forEach(function(member, index) {
+
+        const item =
+            document.createElement("div");
+
+        item.className = "record-item";
+
+
+        item.innerHTML = `
+
+            <h3>
+                👤 ${escapeHTML(member.name)}
+            </h3>
+
+            <p>
+                <strong>Relation:</strong>
+                ${escapeHTML(member.relation)}
+            </p>
+
+            <p>
+                <strong>Blood Group:</strong>
+                ${escapeHTML(member.blood)}
+            </p>
+
+            <div class="record-actions">
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteFamilyMember(${index})">
+
+                    🗑️ Delete
+
+                </button>
+
+            </div>
+
+        `;
+
+
+        list.appendChild(item);
+
+    });
+
+}
+
+
+function deleteFamilyMember(index) {
+
+    const family =
+        getFamilyMembers();
+
+
+    family.splice(index, 1);
+
+
+    localStorage.setItem(
+        "mediPassFamily",
+        JSON.stringify(family)
+    );
+
+
+    renderFamilyMembers();
+
+}
+
+
+function renderTimeline() {
+
+    const timeline =
+        document.getElementById("mainTimeline");
+
+
+    if (!timeline) {
+        return;
+    }
+
+
+    const patient =
+        getPatient();
+
+    const medicines =
+        getMedicines();
+
+    const reports =
+        getReports();
+
+
+    let html = "";
+
+
+    if (patient.name) {
+
+        html += `
+
+            <div class="timeline-item">
+
+                📋
+                <strong>
+                    Patient profile created
+                </strong>
+
+                <br>
+
+                <small>
+                    ${escapeHTML(patient.name)}
+                </small>
+
+            </div>
+
+        `;
+
+    }
+
+
+    if (
+        patient.bloodPressure ||
+        patient.heartRate ||
+        patient.spo2 ||
+        patient.bloodSugar
+    ) {
+
+        html += `
+
+            <div class="timeline-item">
+
+                ❤️
+                <strong>
+                    Health vitals recorded
+                </strong>
+
+                <br>
+
+                <small>
+                    Blood pressure, heart rate,
+                    SpO₂ or sugar information available
+                </small>
+
+            </div>
+
+        `;
+
+    }
+
+
+    medicines.forEach(function(medicine) {
+
+        html += `
+
+            <div class="timeline-item">
+
+                💊
+                <strong>
+                    Medicine added
+                </strong>
+
+                <br>
+
+                <small>
+                    ${escapeHTML(medicine.name)}
+                </small>
+
+            </div>
+
+        `;
+
+    });
+
+
+    reports.forEach(function(report) {
+
+        html += `
+
+            <div class="timeline-item">
+
+                📄
+                <strong>
+                    Medical report stored
+                </strong>
+
+                <br>
+
+                <small>
+                    ${escapeHTML(report.name)}
+                    •
+                    ${escapeHTML(report.date)}
+                </small>
+
+            </div>
+
+        `;
+
+    });
+
+
+    if (
+        patient.allergies &&
+        patient.allergies.trim()
+    ) {
+
+        html += `
+
+            <div class="timeline-item">
+
+                ⚠️
+                <strong>
+                    Allergy alert recorded
+                </strong>
+
+                <br>
+
+                <small>
+                    ${escapeHTML(patient.allergies)}
+                </small>
+
+            </div>
+
+        `;
+
+    }
+
+
+    if (!html) {
+
+        html = `
+
+            <div class="timeline-item">
+
+                📭 No medical events recorded yet.
+
+            </div>
+
+        `;
+
+    }
+
+
+    timeline.innerHTML =
+        html;
+
+}
+
+
+function escapeHTML(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+
+/* =================================================
+   PAGE LOAD
+================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        /*
+         * Homepage par patient/emergency card
+         * automatically open nahi hoga.
+         */
+
+        renderMedicines();
+
+        renderReports();
+
+        renderFamilyMembers();
+
+        renderTimeline();
+
+        updateAllergy();
+
+        generateAIMemory();
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,879 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>MEDI-PASS | Medicines</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     NAVBAR
+========================================= -->
+
+<header class="navbar">
+
+    <div class="logo">
+        <span>✚</span> MEDI-PASS
+    </div>
+
+    <a href="dashboard.html"
+       class="back-button">
+
+        ← Dashboard
+
+    </a>
+
+</header>
+
+
+
+<!-- =========================================
+     MAIN
+========================================= -->
+
+<main class="vitals-page">
+
+
+    <!-- HEADER -->
+
+    <div class="vitals-header">
+
+        <p>
+            MEDICAL DASHBOARD
+        </p>
+
+        <h1>
+            💊 Medicines
+        </h1>
+
+        <span>
+            Current and previous medicines recorded in your medical history.
+        </span>
+
+    </div>
+
+
+
+    <!-- =========================================
+         ADD MEDICINE
+    ========================================== -->
+
+    <section class="vital-note">
+
+        <h3>
+            ➕ Add Medicine
+        </h3>
+
+
+        <div class="form-grid">
+
+
+            <!-- MEDICINE NAME -->
+
+            <div class="form-group">
+
+                <label>
+                    Medicine Name
+                </label>
+
+                <input
+                    type="text"
+                    id="medicineName"
+                    placeholder="e.g. Paracetamol">
+
+            </div>
+
+
+
+            <!-- DOSE -->
+
+            <div class="form-group">
+
+                <label>
+                    Dose
+                </label>
+
+                <input
+                    type="text"
+                    id="medicineDose"
+                    placeholder="e.g. 500 mg">
+
+            </div>
+
+
+
+            <!-- FREQUENCY -->
+
+            <div class="form-group">
+
+                <label>
+                    Frequency
+                </label>
+
+                <select id="medicineFrequency">
+
+                    <option value="">
+                        Select Frequency
+                    </option>
+
+                    <option>
+                        Once daily
+                    </option>
+
+                    <option>
+                        Twice daily
+                    </option>
+
+                    <option>
+                        Three times daily
+                    </option>
+
+                    <option>
+                        As prescribed
+                    </option>
+
+                    <option>
+                        As needed
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- TIMING -->
+
+            <div class="form-group">
+
+                <label>
+                    Timing
+                </label>
+
+                <select id="medicineTiming">
+
+                    <option value="">
+                        Select Timing
+                    </option>
+
+                    <option>
+                        Morning
+                    </option>
+
+                    <option>
+                        Afternoon
+                    </option>
+
+                    <option>
+                        Night
+                    </option>
+
+                    <option>
+                        Morning + Night
+                    </option>
+
+                    <option>
+                        Morning + Afternoon + Night
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- START DATE -->
+
+            <div class="form-group">
+
+                <label>
+                    Start Date
+                </label>
+
+                <input
+                    type="date"
+                    id="medicineStartDate">
+
+            </div>
+
+
+
+            <!-- END DATE -->
+
+            <div class="form-group">
+
+                <label>
+                    End Date
+                </label>
+
+                <input
+                    type="date"
+                    id="medicineEndDate">
+
+            </div>
+
+
+
+            <!-- REASON -->
+
+            <div class="form-group">
+
+                <label>
+                    Reason
+                </label>
+
+                <input
+                    type="text"
+                    id="medicineReason"
+                    placeholder="e.g. Fever / Pain">
+
+            </div>
+
+
+
+            <!-- DOCTOR -->
+
+            <div class="form-group">
+
+                <label>
+                    Doctor
+                </label>
+
+                <input
+                    type="text"
+                    id="medicineDoctor"
+                    placeholder="Doctor name">
+
+            </div>
+
+
+
+            <!-- STATUS -->
+
+            <div class="form-group">
+
+                <label>
+                    Status
+                </label>
+
+                <select id="medicineStatus">
+
+                    <option value="Current">
+                        Current
+                    </option>
+
+                    <option value="Previous">
+                        Previous
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- SIDE EFFECTS -->
+
+            <div class="form-group full">
+
+                <label>
+                    Side Effects
+                </label>
+
+                <textarea
+                    id="medicineSideEffects"
+                    placeholder="Enter side effects if any"></textarea>
+
+            </div>
+
+
+        </div>
+
+
+
+        <button
+            class="primary-btn"
+            onclick="saveMedicine()">
+
+            💾 Save Medicine
+
+        </button>
+
+    </section>
+
+
+
+    <!-- =========================================
+         MEDICINE LIST
+    ========================================== -->
+
+    <section>
+
+        <div
+            class="vitals-header"
+            style="margin-top: 35px;">
+
+            <p>
+                MEDICATION RECORD
+            </p>
+
+            <h2>
+                💊 Saved Medicines
+            </h2>
+
+            <span>
+                Review current and previous medicines.
+            </span>
+
+        </div>
+
+
+
+        <div
+            id="medicineList"
+            class="dashboard-grid">
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         INFORMATION
+    ========================================== -->
+
+    <section class="vital-note">
+
+        <h3>
+            ℹ️ Medicine Safety
+        </h3>
+
+        <p>
+            MEDI-PASS stores and organizes medicine information
+            from your medical records.
+        </p>
+
+        <p>
+            Medicine information should be verified by the patient
+            and authorized healthcare professionals.
+        </p>
+
+        <small>
+            AI does not prescribe medicines or change medication.
+        </small>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =========================================
+     JAVASCRIPT
+========================================= -->
+
+<script>
+
+
+/* =========================================
+   LOAD MEDICINES
+========================================= */
+
+function getMedicines() {
+
+    return JSON.parse(
+        localStorage.getItem("mediPassMedicines")
+    ) || [];
+
+}
+
+
+
+/* =========================================
+   SAVE MEDICINE
+========================================= */
+
+function saveMedicine() {
+
+
+    const name =
+        document.getElementById(
+            "medicineName"
+        ).value.trim();
+
+
+    const dose =
+        document.getElementById(
+            "medicineDose"
+        ).value.trim();
+
+
+    const frequency =
+        document.getElementById(
+            "medicineFrequency"
+        ).value;
+
+
+    const timing =
+        document.getElementById(
+            "medicineTiming"
+        ).value;
+
+
+    const startDate =
+        document.getElementById(
+            "medicineStartDate"
+        ).value;
+
+
+    const endDate =
+        document.getElementById(
+            "medicineEndDate"
+        ).value;
+
+
+    const reason =
+        document.getElementById(
+            "medicineReason"
+        ).value.trim();
+
+
+    const doctor =
+        document.getElementById(
+            "medicineDoctor"
+        ).value.trim();
+
+
+    const status =
+        document.getElementById(
+            "medicineStatus"
+        ).value;
+
+
+    const sideEffects =
+        document.getElementById(
+            "medicineSideEffects"
+        ).value.trim();
+
+
+
+    /* VALIDATION */
+
+    if (!name) {
+
+        alert(
+            "Please enter medicine name."
+        );
+
+        return;
+
+    }
+
+
+
+    if (!dose) {
+
+        alert(
+            "Please enter medicine dose."
+        );
+
+        return;
+
+    }
+
+
+
+    /* MEDICINE OBJECT */
+
+    const medicine = {
+
+        id:
+            Date.now(),
+
+        name:
+            name,
+
+        dose:
+            dose,
+
+        frequency:
+            frequency,
+
+        timing:
+            timing,
+
+        startDate:
+            startDate,
+
+        endDate:
+            endDate,
+
+        reason:
+            reason,
+
+        doctor:
+            doctor,
+
+        status:
+            status,
+
+        sideEffects:
+            sideEffects,
+
+        createdAt:
+            new Date().toISOString()
+
+    };
+
+
+
+    /* GET OLD MEDICINES */
+
+    const medicines =
+        getMedicines();
+
+
+
+    /* ADD NEW */
+
+    medicines.push(
+        medicine
+    );
+
+
+
+    /* SAVE */
+
+    localStorage.setItem(
+
+        "mediPassMedicines",
+
+        JSON.stringify(
+            medicines
+        )
+
+    );
+
+
+
+    /* CLEAR FORM */
+
+    document.getElementById(
+        "medicineName"
+    ).value = "";
+
+
+    document.getElementById(
+        "medicineDose"
+    ).value = "";
+
+
+    document.getElementById(
+        "medicineFrequency"
+    ).value = "";
+
+
+    document.getElementById(
+        "medicineTiming"
+    ).value = "";
+
+
+    document.getElementById(
+        "medicineStartDate"
+    ).value = "";
+
+
+    document.getElementById(
+        "medicineEndDate"
+    ).value = "";
+
+
+    document.getElementById(
+        "medicineReason"
+    ).value = "";
+
+
+    document.getElementById(
+        "medicineDoctor"
+    ).value = "";
+
+
+    document.getElementById(
+        "medicineStatus"
+    ).value = "Current";
+
+
+    document.getElementById(
+        "medicineSideEffects"
+    ).value = "";
+
+
+
+    /* REFRESH */
+
+    displayMedicines();
+
+
+    alert(
+        "Medicine saved successfully."
+    );
+
+}
+
+
+
+/* =========================================
+   DELETE MEDICINE
+========================================= */
+
+function deleteMedicine(id) {
+
+
+    let medicines =
+        getMedicines();
+
+
+    medicines =
+        medicines.filter(
+            function(medicine) {
+
+                return medicine.id !== id;
+
+            }
+        );
+
+
+    localStorage.setItem(
+
+        "mediPassMedicines",
+
+        JSON.stringify(
+            medicines
+        )
+
+    );
+
+
+    displayMedicines();
+
+}
+
+
+
+/* =========================================
+   DISPLAY MEDICINES
+========================================= */
+
+function displayMedicines() {
+
+
+    const container =
+        document.getElementById(
+            "medicineList"
+        );
+
+
+    const medicines =
+        getMedicines();
+
+
+
+    /* EMPTY STATE */
+
+    if (medicines.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="dashboard-card">
+
+                <div class="card-icon">
+                    💊
+                </div>
+
+                <h3>
+                    No Medicines Added
+                </h3>
+
+                <p>
+                    Add a medicine above to create
+                    your medication record.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+
+    /* SHOW MEDICINES */
+
+    container.innerHTML = "";
+
+
+
+    medicines
+        .slice()
+        .reverse()
+        .forEach(
+            function(medicine) {
+
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "dashboard-card";
+
+
+
+                card.innerHTML = `
+
+                    <div class="card-icon">
+                        💊
+                    </div>
+
+
+                    <h3>
+                        ${medicine.name}
+                    </h3>
+
+
+                    <p>
+                        <strong>
+                            Dose:
+                        </strong>
+
+                        ${medicine.dose}
+                    </p>
+
+
+                    <p>
+                        <strong>
+                            Frequency:
+                        </strong>
+
+                        ${medicine.frequency || "Not recorded"}
+                    </p>
+
+
+                    <p>
+                        <strong>
+                            Timing:
+                        </strong>
+
+                        ${medicine.timing || "Not recorded"}
+                    </p>
+
+
+                    <p>
+                        <strong>
+                            Reason:
+                        </strong>
+
+                        ${medicine.reason || "Not recorded"}
+                    </p>
+
+
+                    <p>
+                        <strong>
+                            Doctor:
+                        </strong>
+
+                        ${medicine.doctor || "Not recorded"}
+                    </p>
+
+
+                    <p>
+                        <strong>
+                            Start:
+                        </strong>
+
+                        ${medicine.startDate || "Not recorded"}
+                    </p>
+
+
+                    <p>
+                        <strong>
+                            End:
+                        </strong>
+
+                        ${medicine.endDate || "Not recorded"}
+                    </p>
+
+
+                    <p>
+                        <strong>
+                            Status:
+                        </strong>
+
+                        ${medicine.status}
+                    </p>
+
+
+                    <p>
+                        <strong>
+                            Side Effects:
+                        </strong>
+
+                        ${medicine.sideEffects || "None recorded"}
+                    </p>
+
+
+                    <button
+                        class="secondary-btn"
+                        onclick="deleteMedicine(${medicine.id})">
+
+                        🗑️ Delete
+
+                    </button>
+
+                `;
+
+
+                container.appendChild(
+                    card
+                );
+
+            }
+        );
+
+}
+
+
+
+/* =========================================
+   INITIAL LOAD
+========================================= */
+
+displayMedicines();
+
+
+</script>
+
+
+</body>
+
+</html>
+```

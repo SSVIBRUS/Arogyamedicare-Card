@@ -1,0 +1,379 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MEDI-PASS | Emergency Profile</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        <span>✚</span> MEDI-PASS
+    </div>
+
+    <a href="dashboard.html" class="back-button">
+        ← Dashboard
+    </a>
+
+</header>
+
+
+<main class="vitals-page">
+
+
+    <!-- Emergency Header -->
+
+    <div class="vitals-header">
+
+        <p>🚨 EMERGENCY MODE</p>
+
+        <h1>Emergency Medical Profile</h1>
+
+        <span>
+            Critical medical information for emergency situations
+        </span>
+
+    </div>
+
+
+
+    <!-- Emergency Information -->
+
+    <section class="dashboard-grid">
+
+
+        <!-- Patient -->
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">👤</div>
+
+            <h3>Patient Name</h3>
+
+            <strong id="emergencyName">
+                Patient
+            </strong>
+
+            <p>
+                Age:
+                <span id="emergencyAge">--</span>
+            </p>
+
+        </div>
+
+
+
+        <!-- Blood Group -->
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">🩸</div>
+
+            <h3>Blood Group</h3>
+
+            <strong id="emergencyBlood">
+                --
+            </strong>
+
+            <p>
+                Important for emergency care
+            </p>
+
+        </div>
+
+
+
+        <!-- Allergy -->
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">⚠️</div>
+
+            <h3>Critical Allergy</h3>
+
+            <strong id="emergencyAllergy">
+                None recorded
+            </strong>
+
+            <p>
+                Alert medical staff before treatment
+            </p>
+
+        </div>
+
+
+
+        <!-- Blood Pressure -->
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">❤️</div>
+
+            <h3>Blood Pressure</h3>
+
+            <strong id="emergencyBP">
+                --
+            </strong>
+
+            <p>
+                Latest recorded reading
+            </p>
+
+        </div>
+
+
+
+        <!-- SpO2 -->
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">🫁</div>
+
+            <h3>SpO₂</h3>
+
+            <strong id="emergencySpO2">
+                --
+            </strong>
+
+            <p>
+                Latest recorded reading
+            </p>
+
+        </div>
+
+
+
+        <!-- Medicines -->
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">💊</div>
+
+            <h3>Current Medicines</h3>
+
+            <strong>1 Active</strong>
+
+            <p>
+                Full details require authorized access
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- Emergency Contact -->
+
+    <section class="vital-note">
+
+        <h3>📞 Emergency Contact</h3>
+
+        <p>
+            Contact a family member or emergency contact
+            when immediate assistance is required.
+        </p>
+
+        <strong id="emergencyContact">
+            Contact Available
+        </strong>
+
+    </section>
+
+
+
+    <!-- Emergency QR Code -->
+
+    <section class="vital-note">
+
+        <h3>📱 Emergency QR Code</h3>
+
+        <p>
+            Scan this QR code to quickly access the emergency
+            medical profile.
+        </p>
+
+        <div style="
+            text-align: center;
+            margin-top: 20px;
+        ">
+
+            <div id="qrcode"
+                 style="
+                    display: inline-block;
+                    padding: 15px;
+                    background: white;
+                    border-radius: 12px;
+                 ">
+            </div>
+
+            <p style="margin-top: 15px;">
+                Scan in an emergency
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- Privacy -->
+
+    <section class="vital-note">
+
+        <h3>🔐 Privacy Protected</h3>
+
+        <p>
+            Only essential emergency information is displayed.
+            Full medical records require authorized access.
+        </p>
+
+        <small>
+            MEDI-PASS protects sensitive medical information.
+        </small>
+
+    </section>
+
+
+</main>
+
+
+
+<script>
+
+    /* Get Patient Data */
+
+    const patientData =
+        JSON.parse(localStorage.getItem("mediPassPatient")) || {};
+
+
+
+    /* Patient Name */
+
+    document.getElementById("emergencyName").textContent =
+        patientData.name || "Patient";
+
+
+
+    /* Blood Group */
+
+    document.getElementById("emergencyBlood").textContent =
+        patientData.blood || "--";
+
+
+
+    /* Blood Pressure */
+
+    document.getElementById("emergencyBP").textContent =
+        patientData.bloodPressure || "--";
+
+
+
+    /* SpO2 */
+
+    document.getElementById("emergencySpO2").textContent =
+        patientData.spo2
+            ? patientData.spo2 + "%"
+            : "--";
+
+
+
+    /* Allergy */
+
+    document.getElementById("emergencyAllergy").textContent =
+        patientData.allergies || "None recorded";
+
+
+
+    /* Emergency Contact */
+
+    if (patientData.emergencyName) {
+
+        document.getElementById("emergencyContact").textContent =
+            patientData.emergencyName +
+            " • " +
+            (patientData.emergencyPhone || "Phone unavailable");
+
+    }
+
+
+
+    /* Calculate Age */
+
+    if (patientData.dob) {
+
+        const birthDate =
+            new Date(patientData.dob);
+
+        const today =
+            new Date();
+
+        let age =
+            today.getFullYear() -
+            birthDate.getFullYear();
+
+        const monthDifference =
+            today.getMonth() -
+            birthDate.getMonth();
+
+
+        if (
+            monthDifference < 0 ||
+            (
+                monthDifference === 0 &&
+                today.getDate() < birthDate.getDate()
+            )
+        ) {
+
+            age--;
+
+        }
+
+
+        document.getElementById("emergencyAge").textContent =
+            age;
+
+    }
+
+
+
+    /* Generate QR Code */
+
+    /* Generate Emergency QR Code */
+
+/* Generate Emergency QR Code */
+
+const emergencyURL =
+    "http://192.168.0.102:5500/emergency.html";
+
+const qrContainer =
+    document.getElementById("qrcode");
+
+qrContainer.innerHTML = "";
+
+new QRCode(qrContainer, {
+    text: emergencyURL,
+    width: 180,
+    height: 180
+});
+
+</script>
+
+
+</body>
+
+</html>
+```

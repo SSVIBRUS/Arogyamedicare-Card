@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MEDI-PASS | Medical Profile</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .profile-page {
+            min-height: 100vh;
+            padding: 50px 20px;
+            background: #f7faff;
+        }
+
+        .profile-container {
+            max-width: 950px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid #e5ebf2;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.07);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .profile-icon {
+            width: 70px;
+            height: 70px;
+            margin: auto auto 15px;
+            border-radius: 20px;
+            background: #eef6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .profile-header h1 {
+            color: #172b4d;
+            margin-bottom: 8px;
+        }
+
+        .profile-header p {
+            color: #667085;
+        }
+
+        .form-section {
+            margin-top: 30px;
+            padding: 25px;
+            border: 1px solid #e5ebf2;
+            border-radius: 18px;
+            background: #fbfdff;
+        }
+
+        .form-section h2 {
+            color: #172b4d;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #172b4d;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px;
+            border: 1px solid #d7e0ea;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 15px;
+            outline: none;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #1976d2;
+            box-shadow: 0 0 0 3px rgba(25,118,210,0.08);
+        }
+
+        .form-group textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .save-area {
+            text-align: center;
+            margin-top: 35px;
+        }
+
+        .save-button {
+            border: none;
+            padding: 15px 35px;
+            border-radius: 12px;
+            background: #1976d2;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .save-button:hover {
+            background: #125ca8;
+        }
+
+        .profile-message {
+            display: none;
+            margin-top: 20px;
+            padding: 13px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .profile-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: #edf8f0;
+            color: #188038;
+        }
+
+        .back-home {
+            display: block;
+            text-align: center;
+            margin-top: 22px;
+            color: #667085;
+            text-decoration: none;
+        }
+
+        @media (max-width: 700px) {
+            .profile-container {
+                padding: 25px 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<section class="profile-page">
+
+    <div class="profile-container">
+
+        <div class="profile-header">
+
+            <div class="profile-icon">
+                🩺
+            </div>
+
+            <h1>Create Your Medical Profile</h1>
+
+            <p>
+                Add your important medical information securely in MEDI-PASS.
+            </p>
+
+        </div>
+
+
+        <form onsubmit="saveMedicalProfile(event)">
+
+
+            <!-- PERSONAL INFORMATION -->
+
+            <div class="form-section">
+
+                <h2>👤 Personal Information</h2>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Full Name</label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter full name"
+                            required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Email Address</label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter email"
+                            required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Age</label>
+
+                        <input
+                            type="number"
+                            id="age"
+                            placeholder="Enter age"
+                            min="1"
+                            max="120">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Gender</label>
+
+                        <select id="gender">
+
+                            <option value="">
+                                Select gender
+                            </option>
+
+                            <option value="Female">
+                                Female
+                            </option>
+
+                            <option value="Male">
+                                Male
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                            <option value="Prefer not to say">
+                                Prefer not to say
+                            </option>
+
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Blood Group</label>
+
+                        <select id="bloodGroup">
+
+                            <option value="">
+                                Select blood group
+                            </option>
+
+                            <option>A+</option>
+                            <option>A-</option>
+                            <option>B+</option>
+                            <option>B-</option>
+                            <option>AB+</option>
+                            <option>AB-</option>
+                            <option>O+</option>
+                            <option>O-</option>
+
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>ABHA ID</label>
+
+                        <input
+                            type="text"
+                            id="abha"
+                            placeholder="Enter ABHA ID">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- BODY & VITALS -->
+
+            <div class="form-section">
+
+                <h2>❤️ Health Vitals</h2>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Height (cm)</label>
+
+                        <input
+                            type="number"
+                            id="height"
+                            placeholder="e.g. 165">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Weight (kg)</label>
+
+                        <input
+                            type="number"
+                            id="weight"
+                            placeholder="e.g. 60">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Blood Pressure</label>
+
+                        <input
+                            type="text"
+                            id="bloodPressure"
+                            placeholder="e.g. 120/80">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Heart Rate (BPM)</label>
+
+                        <input
+                            type="number"
+                            id="heartRate"
+                            placeholder="e.g. 72">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>SpO₂ (%)</label>
+
+                        <input
+                            type="number"
+                            id="spo2"
+                            placeholder="e.g. 98">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Blood Sugar</label>
+
+                        <input
+                            type="text"
+                            id="bloodSugar"
+                            placeholder="e.g. 95 mg/dL">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MEDICAL INFORMATION -->
+
+            <div class="form-section">
+
+                <h2>⚠️ Medical Information</h2>
+
+                <div class="form-grid">
+
+                    <div class="form-group full">
+
+                        <label>
+                            Allergies
+                        </label>
+
+                        <textarea
+                            id="allergies"
+                            placeholder="Enter allergies or write 'None'"></textarea>
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label>
+                            Existing Medical Conditions
+                        </label>
+
+                        <textarea
+                            id="conditions"
+                            placeholder="e.g. Asthma, diabetes, hypertension, etc."></textarea>
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label>
+                            Current Medicines
+                        </label>
+
+                        <textarea
+                            id="currentMedicines"
+                            placeholder="Enter current medicines"></textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- EMERGENCY CONTACT -->
+
+            <div class="form-section">
+
+                <h2>🚨 Emergency Contact</h2>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>
+                            Contact Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="emergencyContactName"
+                            placeholder="Emergency contact name">
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Relationship
+                        </label>
+
+                        <input
+                            type="text"
+                            id="emergencyContactRelation"
+                            placeholder="e.g. Mother, Father">
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Phone Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="emergencyContactPhone"
+                            placeholder="Emergency contact number">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PREFERENCES -->
+
+            <div class="form-section">
+
+                <h2>🌐 Preferences</h2>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>
+                            Preferred Language
+                        </label>
+
+                        <select id="language">
+
+                            <option value="">
+                                Select language
+                            </option>
+
+                            <option value="English">
+                                English
+                            </option>
+
+                            <option value="Hindi">
+                                Hindi
+                            </option>
+
+                            <option value="Marathi">
+                                Marathi
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SAVE -->
+
+            <div class="save-area">
+
+                <button
+                    type="submit"
+                    class="save-button">
+
+                    💾 Save Medical Profile
+
+                </button>
+
+                <div
+                    id="profileMessage"
+                    class="profile-message success-message">
+
+                    ✓ Medical profile saved successfully!
+
+                </div>
+
+            </div>
+
+        </form>
+
+
+        <a href="index.html" class="back-home">
+            ← Back to Home
+        </a>
+
+    </div>
+
+</section>
+
+
+<script>
+
+function saveMedicalProfile(event) {
+
+    event.preventDefault();
+
+
+    const patient = {
+
+        name:
+            document.getElementById("name").value.trim(),
+
+        email:
+            document.getElementById("email").value.trim(),
+
+        age:
+            document.getElementById("age").value,
+
+        gender:
+            document.getElementById("gender").value,
+
+        bloodGroup:
+            document.getElementById("bloodGroup").value,
+
+        abha:
+            document.getElementById("abha").value.trim(),
+
+        height:
+            document.getElementById("height").value,
+
+        weight:
+            document.getElementById("weight").value,
+
+        bloodPressure:
+            document.getElementById("bloodPressure").value.trim(),
+
+        heartRate:
+            document.getElementById("heartRate").value,
+
+        spo2:
+            document.getElementById("spo2").value,
+
+        bloodSugar:
+            document.getElementById("bloodSugar").value.trim(),
+
+        allergies:
+            document.getElementById("allergies").value.trim(),
+
+        conditions:
+            document.getElementById("conditions").value.trim(),
+
+        currentMedicines:
+            document.getElementById("currentMedicines").value.trim(),
+
+        emergencyContactName:
+            document.getElementById("emergencyContactName").value.trim(),
+
+        emergencyContactRelation:
+            document.getElementById("emergencyContactRelation").value.trim(),
+
+        emergencyContactPhone:
+            document.getElementById("emergencyContactPhone").value.trim(),
+
+        language:
+            document.getElementById("language").value
+
+    };
+
+
+    localStorage.setItem(
+        "mediPassPatient",
+        JSON.stringify(patient)
+    );
+
+
+    const message =
+        document.getElementById("profileMessage");
+
+    message.classList.add("show");
+
+
+    setTimeout(function() {
+
+        window.location.href = "dashboard.html";
+
+    }, 1000);
+
+}
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MEDI-PASS | Health Vitals</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+
+        <div class="logo">
+            <span>✚</span> MEDI-PASS
+        </div>
+
+        <a href="dashboard.html" class="back-button">
+            ← Dashboard
+        </a>
+
+    </header>
+
+
+    <!-- HEALTH VITALS PAGE -->
+    <main class="vitals-page">
+
+        <div class="vitals-header">
+
+            <p>MEDICAL DASHBOARD</p>
+
+            <h1>❤️ Health Vitals</h1>
+
+            <span>
+                Important health measurements and recent readings.
+            </span>
+
+        </div>
+
+
+        <!-- CURRENT VITALS -->
+        <section class="vitals-detail-grid">
+
+            <div class="vital-detail-card">
+
+                <div class="detail-icon">🩸</div>
+
+                <h3>Blood Pressure</h3>
+
+                <strong>70/40</strong>
+
+                <p>mmHg</p>
+
+            </div>
+
+
+            <div class="vital-detail-card">
+
+                <div class="detail-icon">❤️</div>
+
+                <h3>Heart Rate</h3>
+
+                <strong>78</strong>
+
+                <p>BPM</p>
+
+            </div>
+
+
+            <div class="vital-detail-card">
+
+                <div class="detail-icon">🫁</div>
+
+                <h3>SpO₂</h3>
+
+                <strong>98%</strong>
+
+                <p>Oxygen Level</p>
+
+            </div>
+
+
+            <div class="vital-detail-card">
+
+                <div class="detail-icon">🩸</div>
+
+                <h3>Blood Sugar</h3>
+
+                <strong>96</strong>
+
+                <p>mg/dL</p>
+
+            </div>
+
+
+            <div class="vital-detail-card">
+
+                <div class="detail-icon">🌡️</div>
+
+                <h3>Temperature</h3>
+
+                <strong>36.8</strong>
+
+                <p>°C</p>
+
+            </div>
+
+
+            <div class="vital-detail-card">
+
+                <div class="detail-icon">⚖️</div>
+
+                <h3>Weight</h3>
+
+                <strong>65</strong>
+
+                <p>kg</p>
+
+            </div>
+
+        </section>
+
+
+        <!-- RECENT READINGS -->
+       <!-- RECENT READINGS -->
+<section class="vital-history">
+
+    <h2>📊 Recent Vital Readings</h2>
+
+    <div class="history-table">
+
+        <div class="history-row history-heading">
+            <span>Date</span>
+            <span>BP</span>
+            <span>Heart Rate</span>
+            <span>SpO₂</span>
+        </div>
+
+        <div id="vitalsHistoryRows">
+
+            <div class="history-row">
+                <span>Loading...</span>
+                <span>--</span>
+                <span>--</span>
+                <span>--</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+        <!-- INFORMATION -->
+        <section class="vital-note">
+
+            <h3>ℹ️ About Health Vitals</h3>
+
+            <p>
+                MEDI-PASS keeps important health measurements
+                organized so they can be quickly reviewed by
+                the patient or an authorized healthcare professional.
+            </p>
+
+            <small>
+                Demo information for competition prototype.
+            </small>
+
+        </section>
+
+    </main>
+    </main>
+
+<script>
+    const patientData =
+        JSON.parse(localStorage.getItem("mediPassPatient")) || {};
+
+    let vitalsHistory =
+        JSON.parse(localStorage.getItem("mediPassVitals")) || [];
+
+    const historyRows =
+        document.getElementById("vitalsHistoryRows");
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+
+        return date.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        });
+    }
+
+    function showVitalsHistory() {
+
+        if (vitalsHistory.length === 0) {
+
+            historyRows.innerHTML = `
+                <div class="history-row">
+                    <span>No readings</span>
+                    <span>--</span>
+                    <span>--</span>
+                    <span>--</span>
+                </div>
+            `;
+
+            return;
+        }
+
+        const sortedVitals = [...vitalsHistory].sort(
+            (a, b) => new Date(b.date) - new Date(a.date)
+        );
+
+        historyRows.innerHTML = "";
+
+        sortedVitals.forEach(vital => {
+
+            const row = document.createElement("div");
+
+            row.className = "history-row";
+
+            row.innerHTML = `
+                <span>${formatDate(vital.date)}</span>
+                <span>${vital.bloodPressure || "--"}</span>
+                <span>${vital.heartRate ? vital.heartRate + " BPM" : "--"}</span>
+                <span>${vital.spo2 ? vital.spo2 + "%" : "--"}</span>
+            `;
+
+            historyRows.appendChild(row);
+        });
+    }
+
+    showVitalsHistory();
+</script>
+
+</body>
+
+</html>
+
+
+</body>
+
+</html>
