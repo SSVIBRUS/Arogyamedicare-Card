@@ -40,70 +40,12 @@
         </div>
 
 
-        <section class="dashboard-grid">
-
+        <section id="reportsGrid" class="dashboard-grid">
             <div class="dashboard-card">
-
-                <div class="card-icon">🩸</div>
-
-                <h3>Blood Test Report</h3>
-
-                <p>
-                    Complete blood count and basic blood test information.
-                </p>
-
-                <strong>Available</strong>
-
-                <p>Latest report: 10 Sept 2026</p>
-
-                <button class="card-button">
-                    View Report
-                </button>
-
+                <div class="card-icon">📄</div>
+                <h3>Loading Reports...</h3>
+                <p>Retrieving diagnostic records from server.</p>
             </div>
-
-
-            <div class="dashboard-card">
-
-                <div class="card-icon">🫀</div>
-
-                <h3>ECG Report</h3>
-
-                <p>
-                    Electrocardiogram report and heart activity record.
-                </p>
-
-                <strong>Available</strong>
-
-                <p>Latest report: 05 Sept 2026</p>
-
-                <button class="card-button">
-                    View Report
-                </button>
-
-            </div>
-
-
-            <div class="dashboard-card">
-
-                <div class="card-icon">🩻</div>
-
-                <h3>X-Ray Report</h3>
-
-                <p>
-                    Diagnostic imaging report stored with the medical history.
-                </p>
-
-                <strong>Available</strong>
-
-                <p>Latest report: 01 Sept 2026</p>
-
-                <button class="card-button">
-                    View Report
-                </button>
-
-            </div>
-
         </section>
 
 
@@ -116,14 +58,76 @@
                 quickly accessed by the patient or an authorized doctor.
             </p>
 
-            <small>
-                Demo information for competition prototype.
-            </small>
+            <div style="margin-top: 15px;">
+                <a href="dashboard.html" class="card-button" style="text-decoration:none;display:inline-block;">
+                    ➕ Upload New Report in Dashboard
+                </a>
+            </div>
 
         </section>
 
     </main>
 
-</body>
+<script src="api.js"></script>
+<script>
+    function getReportIcon(type) {
+        const t = (type || "").toLowerCase();
+        if (t.includes("blood")) return "🩸";
+        if (t.includes("ecg") || t.includes("heart")) return "🫀";
+        if (t.includes("x-ray") || t.includes("scan") || t.includes("imaging")) return "🩻";
+        if (t.includes("prescription")) return "💊";
+        return "📄";
+    }
+
+    async function loadReportsPage() {
+        const grid = document.getElementById("reportsGrid");
+        let reports = JSON.parse(localStorage.getItem("mediPassReports")) || [];
+
+        if (window.MediPassAPI && window.MediPassAPI.getToken()) {
+            try {
+                const list = await window.MediPassAPI.reports.getAll();
+                if (Array.isArray(list) && list.length > 0) {
+                    reports = list;
+                }
+            } catch (_) {}
+        }
+
+        if (!grid) return;
+
+        if (reports.length === 0) {
+            grid.innerHTML = `
+                <div class="dashboard-card" style="grid-column: 1 / -1; text-align: center;">
+                    <div class="card-icon">📄</div>
+                    <h3>No Reports Uploaded Yet</h3>
+                    <p>Upload prescriptions, lab tests, scans, and ECG records securely from your dashboard.</p>
+                    <a href="dashboard.html" class="card-button" style="text-decoration:none;display:inline-block;margin-top:12px;">Go to Dashboard</a>
+                </div>
+            `;
+            return;
+        }
+
+        grid.innerHTML = reports.map(r => `
+            <div class="dashboard-card">
+                <div class="card-icon">${getReportIcon(r.type)}</div>
+                <h3>${r.name}</h3>
+                <p>${r.hospital ? 'Issued by ' + r.hospital : (r.type || 'Medical Report')}</p>
+                <strong>${r.fileName ? 'File Attached' : 'Record Available'}</strong>
+                <p>Report date: ${r.date || '--'}</p>
+                ${r.fileUrl ? `
+                    <a href="${r.fileUrl}" target="_blank" class="card-button" style="text-decoration:none;display:inline-block;margin-top:10px;">
+                        📥 View Document
+                    </a>
+                ` : `
+                    <a href="dashboard.html" class="card-button" style="text-decoration:none;display:inline-block;margin-top:10px;">
+                        View in Dashboard
+                    </a>
+                `}
+            </div>
+        `).join("");
+    }
+
+    document.addEventListener("DOMContentLoaded", loadReportsPage);
+    loadReportsPage();
+</script>
 
 </html>

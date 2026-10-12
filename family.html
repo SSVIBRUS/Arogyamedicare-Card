@@ -40,57 +40,12 @@
         </div>
 
 
-        <section class="dashboard-grid">
-
+        <section id="familyGrid" class="dashboard-grid">
             <div class="dashboard-card">
-
-                <div class="card-icon">👤</div>
-
-                <h3>Demo Patient</h3>
-
-                <p>
-                    Primary patient profile with medical history,
-                    vitals, medicines and emergency information.
-                </p>
-
-                <strong>Active Profile</strong>
-
+                <div class="card-icon">👨‍👩‍👧</div>
+                <h3>Loading Profiles...</h3>
+                <p>Retrieving family member health cards.</p>
             </div>
-
-
-            <div class="dashboard-card">
-
-                <div class="card-icon">👩</div>
-
-                <h3>Family Member</h3>
-
-                <p>
-                    Add and manage a family member's important
-                    medical information in one place.
-                </p>
-
-                <strong>Profile Available</strong>
-
-            </div>
-
-
-            <div class="dashboard-card">
-
-                <div class="card-icon">➕</div>
-
-                <h3>Add Family Member</h3>
-
-                <p>
-                    Create another family health profile for
-                    easier access to important medical information.
-                </p>
-
-                <button class="card-button">
-                    Add Profile
-                </button>
-
-            </div>
-
         </section>
 
 
@@ -99,18 +54,62 @@
             <h3>🔐 Family Health Access</h3>
 
             <p>
-                MEDI-PASS can organize health information for
-                multiple family members while keeping their
-                medical profiles separate and secure.
+                MEDI-PASS organizes health information for family members while
+                keeping their medical profiles separate, accessible, and secure.
             </p>
 
-            <small>
-                Family profile feature shown is a competition prototype concept.
-            </small>
+            <div style="margin-top: 15px;">
+                <a href="dashboard.html" class="card-button" style="text-decoration:none;display:inline-block;">
+                    ➕ Add Family Member in Dashboard
+                </a>
+            </div>
 
         </section>
 
     </main>
+
+<script src="api.js"></script>
+<script>
+    async function loadFamilyPage() {
+        const grid = document.getElementById("familyGrid");
+        let family = JSON.parse(localStorage.getItem("mediPassFamily")) || [];
+
+        if (window.MediPassAPI && window.MediPassAPI.getToken()) {
+            try {
+                const list = await window.MediPassAPI.family.getAll();
+                if (Array.isArray(list)) family = list;
+            } catch (_) {}
+        }
+
+        if (!grid) return;
+
+        if (family.length === 0) {
+            grid.innerHTML = `
+                <div class="dashboard-card" style="grid-column: 1 / -1; text-align: center;">
+                    <div class="card-icon">👨‍👩‍👧</div>
+                    <h3>No Family Profiles Added Yet</h3>
+                    <p>Add health profiles for parents, children, or spouse from your dashboard.</p>
+                    <a href="dashboard.html" class="card-button" style="text-decoration:none;display:inline-block;margin-top:10px;">Go to Dashboard</a>
+                </div>
+            `;
+            return;
+        }
+
+        grid.innerHTML = family.map(f => `
+            <div class="dashboard-card">
+                <div class="card-icon">👤</div>
+                <h3>${f.name}</h3>
+                <p>Relationship: <strong>${f.relation}</strong></p>
+                <p>Blood Group: <strong>${f.bloodGroup || f.blood || '--'}</strong></p>
+                <p>Allergies: <strong>${f.allergies || 'None recorded'}</strong></p>
+                <strong>Active Profile</strong>
+            </div>
+        `).join("");
+    }
+
+    document.addEventListener("DOMContentLoaded", loadFamilyPage);
+    loadFamilyPage();
+</script>
 
 </body>
 

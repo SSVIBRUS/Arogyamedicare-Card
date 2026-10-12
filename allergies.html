@@ -46,15 +46,13 @@
 
                 <div class="card-icon">⚠️</div>
 
-                <h3>Drug Allergy</h3>
+                <h3>Allergies & Sensitivities</h3>
 
-                <p>
-                    Patient has a recorded drug allergy.
-                    Healthcare professionals should review the
-                    medical record before prescribing medication.
+                <p id="allergyDetails">
+                    Patient allergy record. Healthcare professionals should review before prescribing.
                 </p>
 
-                <strong>CRITICAL ALERT</strong>
+                <strong id="allergySeverity" style="color:#d32f2f;">CRITICAL ALERT</strong>
 
             </div>
 
@@ -66,11 +64,10 @@
                 <h3>Blood Group</h3>
 
                 <p>
-                    Blood group information is available for
-                    emergency reference.
+                    Verified blood group for emergency cross-matching.
                 </p>
 
-                <strong>O+</strong>
+                <strong id="allergyBloodGroup">--</strong>
 
             </div>
 
@@ -79,14 +76,13 @@
 
                 <div class="card-icon">🚑</div>
 
-                <h3>Emergency Information</h3>
+                <h3>Emergency Contact</h3>
 
-                <p>
-                    Emergency contact information is stored
-                    securely in the patient's medical profile.
+                <p id="allergyEmergencyDetails">
+                    Emergency contact information stored securely in profile.
                 </p>
 
-                <strong>Available</strong>
+                <strong id="allergyEmergencyStatus">Available</strong>
 
             </div>
 
@@ -95,21 +91,63 @@
 
         <section class="vital-note">
 
-            <h3>🚨 Emergency Alert</h3>
+            <h3>🚨 Emergency Alert & Instructions</h3>
 
-            <p>
-                Critical allergies and emergency information are
-                highlighted so authorized healthcare professionals
-                can review them quickly during an emergency.
+            <p id="allergyNoteText">
+                Critical allergies and emergency information are highlighted so healthcare professionals
+                can act fast and prevent adverse drug interactions.
             </p>
 
-            <small>
-                Demo information for competition prototype.
-            </small>
+            <div style="margin-top: 15px;">
+                <a href="dashboard.html" class="card-button" style="text-decoration:none;display:inline-block;">
+                    ✏️ Update Allergy Record in Dashboard
+                </a>
+            </div>
 
         </section>
 
     </main>
+
+<script src="api.js"></script>
+<script>
+    async function loadAllergiesPage() {
+        let patient = JSON.parse(localStorage.getItem("mediPassPatient")) || {};
+        if (window.MediPassAPI && window.MediPassAPI.getToken()) {
+            try {
+                const me = await window.MediPassAPI.auth.getMe();
+                if (me) patient = me;
+            } catch (_) {}
+        }
+
+        const allergyEl = document.getElementById("allergyDetails");
+        const severityEl = document.getElementById("allergySeverity");
+        const bloodEl = document.getElementById("allergyBloodGroup");
+        const emergEl = document.getElementById("allergyEmergencyDetails");
+        const emergStatEl = document.getElementById("allergyEmergencyStatus");
+
+        if (bloodEl) bloodEl.textContent = patient.bloodGroup || patient.blood || "--";
+
+        if (patient.allergies && patient.allergies.trim()) {
+            if (allergyEl) allergyEl.textContent = `Patient has recorded allergies: "${patient.allergies}".`;
+            if (severityEl) severityEl.textContent = "CRITICAL ALERT";
+        } else {
+            if (allergyEl) allergyEl.textContent = "No drug or food allergies currently recorded.";
+            if (severityEl) {
+                severityEl.textContent = "NO RECORDED ALLERGIES";
+                severityEl.style.color = "#2e7d32";
+            }
+        }
+
+        const contact = [patient.emergencyContactName || patient.emergencyName, patient.emergencyContactPhone || patient.emergencyPhone].filter(Boolean).join(" • ");
+        if (contact) {
+            if (emergEl) emergEl.textContent = `Primary Contact: ${contact}`;
+            if (emergStatEl) emergStatEl.textContent = "Active";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadAllergiesPage);
+    loadAllergiesPage();
+</script>
 
 </body>
 

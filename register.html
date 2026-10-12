@@ -228,6 +228,16 @@
                             required>
                     </div>
 
+                    <div class="form-group">
+                        <label>Password</label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Create a password"
+                            required>
+                    </div>
+
 
                     <div class="form-group">
                         <label>Age</label>
@@ -555,97 +565,8 @@
 </section>
 
 
-<script>
-
-function saveMedicalProfile(event) {
-
-    event.preventDefault();
-
-
-    const patient = {
-
-        name:
-            document.getElementById("name").value.trim(),
-
-        email:
-            document.getElementById("email").value.trim(),
-
-        age:
-            document.getElementById("age").value,
-
-        gender:
-            document.getElementById("gender").value,
-
-        bloodGroup:
-            document.getElementById("bloodGroup").value,
-
-        abha:
-            document.getElementById("abha").value.trim(),
-
-        height:
-            document.getElementById("height").value,
-
-        weight:
-            document.getElementById("weight").value,
-
-        bloodPressure:
-            document.getElementById("bloodPressure").value.trim(),
-
-        heartRate:
-            document.getElementById("heartRate").value,
-
-        spo2:
-            document.getElementById("spo2").value,
-
-        bloodSugar:
-            document.getElementById("bloodSugar").value.trim(),
-
-        allergies:
-            document.getElementById("allergies").value.trim(),
-
-        conditions:
-            document.getElementById("conditions").value.trim(),
-
-        currentMedicines:
-            document.getElementById("currentMedicines").value.trim(),
-
-        emergencyContactName:
-            document.getElementById("emergencyContactName").value.trim(),
-
-        emergencyContactRelation:
-            document.getElementById("emergencyContactRelation").value.trim(),
-
-        emergencyContactPhone:
-            document.getElementById("emergencyContactPhone").value.trim(),
-
-        language:
-            document.getElementById("language").value
-
-    };
-
-
-    localStorage.setItem(
-        "mediPassPatient",
-        JSON.stringify(patient)
-    );
-
-
-    const message =
-        document.getElementById("profileMessage");
-
-    message.classList.add("show");
-
-
-    setTimeout(function() {
-
-        window.location.href = "dashboard.html";
-
-    }, 1000);
-
-}
-
-</script>
-
+<script src="api.js"></script>
+<script src="script.js"></script>
 </body>
 
 </html>

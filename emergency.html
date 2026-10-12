@@ -252,128 +252,89 @@
 
 
 
+<script src="api.js"></script>
 <script>
+    async function loadEmergencyProfile() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const patientId = urlParams.get('id');
+        let data = null;
 
-    /* Get Patient Data */
-
-    const patientData =
-        JSON.parse(localStorage.getItem("mediPassPatient")) || {};
-
-
-
-    /* Patient Name */
-
-    document.getElementById("emergencyName").textContent =
-        patientData.name || "Patient";
-
-
-
-    /* Blood Group */
-
-    document.getElementById("emergencyBlood").textContent =
-        patientData.blood || "--";
-
-
-
-    /* Blood Pressure */
-
-    document.getElementById("emergencyBP").textContent =
-        patientData.bloodPressure || "--";
-
-
-
-    /* SpO2 */
-
-    document.getElementById("emergencySpO2").textContent =
-        patientData.spo2
-            ? patientData.spo2 + "%"
-            : "--";
-
-
-
-    /* Allergy */
-
-    document.getElementById("emergencyAllergy").textContent =
-        patientData.allergies || "None recorded";
-
-
-
-    /* Emergency Contact */
-
-    if (patientData.emergencyName) {
-
-        document.getElementById("emergencyContact").textContent =
-            patientData.emergencyName +
-            " • " +
-            (patientData.emergencyPhone || "Phone unavailable");
-
-    }
-
-
-
-    /* Calculate Age */
-
-    if (patientData.dob) {
-
-        const birthDate =
-            new Date(patientData.dob);
-
-        const today =
-            new Date();
-
-        let age =
-            today.getFullYear() -
-            birthDate.getFullYear();
-
-        const monthDifference =
-            today.getMonth() -
-            birthDate.getMonth();
-
-
-        if (
-            monthDifference < 0 ||
-            (
-                monthDifference === 0 &&
-                today.getDate() < birthDate.getDate()
-            )
-        ) {
-
-            age--;
-
+        if (window.MediPassAPI) {
+            try {
+                if (patientId) {
+                    data = await window.MediPassAPI.emergency.getByUserId(patientId);
+                } else if (window.MediPassAPI.getToken()) {
+                    data = await window.MediPassAPI.emergency.getMe();
+                }
+            } catch (err) {
+                console.warn("Could not fetch remote emergency profile:", err);
+            }
         }
 
+        // Fallback to local storage if API didn't return data
+        if (!data) {
+            const localPatient = JSON.parse(localStorage.getItem("mediPassPatient")) || {};
+            data = {
+                name: localPatient.name || "Patient",
+                bloodGroup: localPatient.bloodGroup || localPatient.blood || "--",
+                age: localPatient.age || "--",
+                dob: localPatient.dob,
+                allergies: localPatient.allergies || "None recorded",
+                conditions: localPatient.conditions || "None recorded",
+                vitals: {
+                    bloodPressure: localPatient.bloodPressure || "--",
+                    spo2: localPatient.spo2 ? (localPatient.spo2 + (String(localPatient.spo2).includes('%') ? '' : '%')) : "--"
+                },
+                emergencyContact: localPatient.emergencyName
+                    ? (localPatient.emergencyName + " • " + (localPatient.emergencyPhone || "Phone unavailable"))
+                    : (localPatient.emergencyContactName ? (localPatient.emergencyContactName + " • " + (localPatient.emergencyContactPhone || "")) : "Contact Available"),
+                currentMedicines: localPatient.currentMedicines || "None recorded"
+            };
 
-        document.getElementById("emergencyAge").textContent =
-            age;
+            if (localPatient.dob && !localPatient.age) {
+                const birthDate = new Date(localPatient.dob);
+                const today = new Date();
+                let calcAge = today.getFullYear() - birthDate.getFullYear();
+                const m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) calcAge--;
+                data.age = calcAge;
+            }
+        }
 
+        /* Update DOM */
+        const nameEl = document.getElementById("emergencyName");
+        const ageEl = document.getElementById("emergencyAge");
+        const bloodEl = document.getElementById("emergencyBlood");
+        const bpEl = document.getElementById("emergencyBP");
+        const spo2El = document.getElementById("emergencySpO2");
+        const allergyEl = document.getElementById("emergencyAllergy");
+        const contactEl = document.getElementById("emergencyContact");
+
+        if (nameEl) nameEl.textContent = data.name || "Patient";
+        if (ageEl) ageEl.textContent = data.age || "--";
+        if (bloodEl) bloodEl.textContent = data.bloodGroup || "--";
+        if (bpEl) bpEl.textContent = (data.vitals && data.vitals.bloodPressure) || data.bloodPressure || "--";
+        if (spo2El) spo2El.textContent = (data.vitals && data.vitals.spo2) || (data.spo2 ? data.spo2 + "%" : "--");
+        if (allergyEl) allergyEl.textContent = data.allergies || "None recorded";
+        if (contactEl) contactEl.textContent = data.emergencyContact || "--";
+
+        /* Generate QR Code */
+        const qrContainer = document.getElementById("qrcode");
+        if (qrContainer && window.QRCode) {
+            qrContainer.innerHTML = "";
+            const currentUrl = window.location.href;
+            new QRCode(qrContainer, {
+                text: currentUrl,
+                width: 180,
+                height: 180
+            });
+        }
     }
 
-
-
-    /* Generate QR Code */
-
-    /* Generate Emergency QR Code */
-
-/* Generate Emergency QR Code */
-
-const emergencyURL =
-    "http://192.168.0.102:5500/emergency.html";
-
-const qrContainer =
-    document.getElementById("qrcode");
-
-qrContainer.innerHTML = "";
-
-new QRCode(qrContainer, {
-    text: emergencyURL,
-    width: 180,
-    height: 180
-});
-
+    document.addEventListener("DOMContentLoaded", loadEmergencyProfile);
+    loadEmergencyProfile();
 </script>
-
 
 </body>
 
 </html>
-```

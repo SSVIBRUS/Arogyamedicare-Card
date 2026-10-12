@@ -40,75 +40,124 @@
         </div>
 
 
-        <section class="dashboard-grid">
-
-            <div class="dashboard-card">
-
-                <div class="card-icon">🔐</div>
-
-                <h3>Secure Access</h3>
-
-                <p>
-                    Medical information can be shared with an
-                    authorized healthcare professional.
-                </p>
-
-                <strong>Protected</strong>
-
+        <!-- Doctor code portal -->
+        <section class="vital-note" style="border-left: 5px solid #1976d2; margin-bottom: 30px;">
+            <h3>🔑 Doctor / Clinic Access Portal</h3>
+            <p>If you are a doctor with an access code provided by a patient, enter it below to access authorized medical records:</p>
+            <div style="display:flex;gap:10px;margin-top:15px;max-width:500px;flex-wrap:wrap;">
+                <input id="portalCodeInput" type="text" placeholder="e.g. MP-XXXXXX" style="flex:1;padding:12px;border:1px solid #d7e0ea;border-radius:10px;text-transform:uppercase;font-weight:700;">
+                <button class="card-button" onclick="lookupDoctorCode()">🔍 View Records</button>
             </div>
-
-
-            <div class="dashboard-card">
-
-                <div class="card-icon">📋</div>
-
-                <h3>Medical Summary</h3>
-
-                <p>
-                    Doctors can review important information such as
-                    vitals, allergies, medicines and reports.
-                </p>
-
-                <strong>Available</strong>
-
-            </div>
-
-
-            <div class="dashboard-card">
-
-                <div class="card-icon">⏱️</div>
-
-                <h3>Access History</h3>
-
-                <p>
-                    Keep a record of authorized medical access
-                    for better transparency and privacy.
-                </p>
-
-                <strong>Enabled</strong>
-
-            </div>
-
+            <div id="portalResult" style="margin-top:20px;display:none;"></div>
         </section>
 
+        <section class="vitals-header" style="margin-top:30px;text-align:left;">
+            <h2>📋 Active Doctor Grants</h2>
+            <span>Access records authorized for healthcare providers.</span>
+        </section>
 
-        <section class="vital-note">
+        <section id="doctorSharesGrid" class="dashboard-grid">
+            <div class="dashboard-card">
+                <div class="card-icon">🔐</div>
+                <h3>Loading Grants...</h3>
+                <p>Retrieving active healthcare access records.</p>
+            </div>
+        </section>
 
-            <h3>🔒 Privacy First</h3>
-
+        <section class="vital-note" style="margin-top:25px;">
+            <h3>🔒 Privacy & Time-Bound Access</h3>
             <p>
-                MEDI-PASS is designed so that medical information
-                can be accessed only by authorized healthcare
-                professionals and shared securely.
+                MEDI-PASS lets patients grant and revoke time-limited access codes to doctors.
+                Access expires automatically after the chosen duration.
             </p>
-
-            <small>
-                Doctor access shown is a competition prototype concept.
-            </small>
-
+            <div style="margin-top: 15px;">
+                <a href="dashboard.html" class="card-button" style="text-decoration:none;display:inline-block;">
+                    ➕ Create New Access Grant in Dashboard
+                </a>
+            </div>
         </section>
 
     </main>
+
+<script src="api.js"></script>
+<script>
+    async function loadDoctorPage() {
+        const grid = document.getElementById("doctorSharesGrid");
+        let shares = JSON.parse(localStorage.getItem("mediPassDoctorShares")) || [];
+
+        if (window.MediPassAPI && window.MediPassAPI.getToken()) {
+            try {
+                const list = await window.MediPassAPI.doctorShares.getAll();
+                if (Array.isArray(list)) shares = list;
+            } catch (_) {}
+        }
+
+        if (!grid) return;
+
+        if (shares.length === 0) {
+            grid.innerHTML = `
+                <div class="dashboard-card" style="grid-column: 1 / -1; text-align: center;">
+                    <div class="card-icon">🔐</div>
+                    <h3>No Active Doctor Grants</h3>
+                    <p>You can create a temporary, secure access code for your doctor from the dashboard.</p>
+                    <a href="dashboard.html" class="card-button" style="text-decoration:none;display:inline-block;margin-top:10px;">Go to Dashboard</a>
+                </div>
+            `;
+            return;
+        }
+
+        grid.innerHTML = shares.map(s => `
+            <div class="dashboard-card">
+                <div class="card-icon">🩺</div>
+                <h3>${s.doctor || s.doctorName || "Doctor"}</h3>
+                <p>${s.note || s.type || "Medical Access"}</p>
+                <strong>Code: ${s.accessCode || s.shareCode || "--"}</strong>
+                <p>Status: <span style="color:#2e7d32;font-weight:700;">${s.status || "Active"}</span></p>
+            </div>
+        `).join("");
+    }
+
+    async function lookupDoctorCode() {
+        const input = document.getElementById("portalCodeInput");
+        const result = document.getElementById("portalResult");
+        const code = input ? input.value.trim().toUpperCase() : "";
+
+        if (!code) {
+            alert("Please enter a valid access code.");
+            return;
+        }
+
+        result.style.display = "block";
+        result.innerHTML = "<p>Verifying access code with MEDI-PASS server...</p>";
+
+        try {
+            if (window.MediPassAPI) {
+                const data = await window.MediPassAPI.doctorShares.getByCode(code);
+                result.innerHTML = `
+                    <div style="background:#f0f9ff;border:1px solid #bae6fd;padding:20px;border-radius:12px;">
+                        <h4 style="color:#0369a1;margin-bottom:10px;">✓ Access Authorized for ${data.accessInfo.doctorName}</h4>
+                        <p><strong>Patient:</strong> ${data.patient.name} (${data.patient.age || '--'} yrs, ${data.patient.gender || '--'})</p>
+                        <p><strong>Blood Group:</strong> ${data.patient.bloodGroup || '--'}</p>
+                        <p><strong>Allergies:</strong> ${data.allergies || 'None recorded'}</p>
+                        <p><strong>Conditions:</strong> ${data.conditions || 'None recorded'}</p>
+                        ${data.vitals ? `<p><strong>Vitals:</strong> BP ${data.vitals.bloodPressure || '--'}, HR ${data.vitals.heartRate || '--'} BPM, SpO2 ${data.vitals.spo2 || '--'}</p>` : ''}
+                        ${data.medicines ? `<p><strong>Active Medicines:</strong> ${data.medicines.map(m => m.name + ' (' + (m.dosage || '') + ')').join(', ') || 'None'}</p>` : ''}
+                        <p style="font-size:12px;color:#0284c7;margin-top:10px;">Expires: ${new Date(data.accessInfo.expiresAt).toLocaleString()}</p>
+                    </div>
+                `;
+            }
+        } catch (err) {
+            result.innerHTML = `
+                <div style="background:#fef2f2;border:1px solid #fecaca;padding:15px;border-radius:12px;color:#dc2626;">
+                    ✕ ${err.message || 'Access code is invalid or has expired.'}
+                </div>
+            `;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadDoctorPage);
+    loadDoctorPage();
+</script>
 
 </body>
 

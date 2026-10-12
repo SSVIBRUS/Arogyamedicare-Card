@@ -40,77 +40,104 @@
         </div>
 
 
-        <section class="dashboard-grid">
-
+        <section id="aiGrid" class="dashboard-grid">
             <div class="dashboard-card">
-
                 <div class="card-icon">🧠</div>
-
-                <h3>Medical History</h3>
-
-                <p>
-                    MEDI-PASS organizes important past medical events,
-                    conditions and treatments.
-                </p>
-
-                <strong>12 Records</strong>
-
+                <h3>Medical Records</h3>
+                <p>MEDI-PASS organizes past medical events, conditions and treatments.</p>
+                <strong id="aiTotalRecords">Loading...</strong>
             </div>
 
-
             <div class="dashboard-card">
-
                 <div class="card-icon">📊</div>
-
                 <h3>Health Trends</h3>
-
-                <p>
-                    Review changes in important health measurements
-                    over time.
-                </p>
-
-                <strong>Tracking Active</strong>
-
+                <p>Tracking vital readings and diagnostic patterns over time.</p>
+                <strong id="aiTrendsStatus">Active</strong>
             </div>
-
 
             <div class="dashboard-card">
-
                 <div class="card-icon">🔎</div>
-
-                <h3>Smart Summary</h3>
-
-                <p>
-                    A simplified summary helps authorized healthcare
-                    professionals understand the patient's history quickly.
-                </p>
-
-                <strong>Ready</strong>
-
+                <h3>Clinical Summary</h3>
+                <p>An intelligent synopsis for authorized healthcare professionals.</p>
+                <strong id="aiSummaryStatus">Ready</strong>
             </div>
-
         </section>
 
+        <section class="vital-note" id="aiPrioritySection" style="margin-top:25px;border-left:5px solid #e53935;">
+            <h3>🚨 What a Doctor Should Know First</h3>
+            <ul id="aiPriorityList" style="margin-top:10px;padding-left:20px;line-height:1.8;color:#172b4d;">
+                <li>Loading clinical alerts...</li>
+            </ul>
+        </section>
+
+        <section class="vital-note" style="margin-top:20px;">
+            <h3>🩺 AI Clinical Overview</h3>
+            <p id="aiSummaryText" style="line-height: 1.8; color: #475467;">
+                Analyzing patient profile...
+            </p>
+        </section>
 
         <section class="vital-note">
-
             <h3>🧠 How AI Health Memory Helps</h3>
-
             <p>
-                MEDI-PASS can organize medical information into a
-                clear timeline, helping doctors quickly understand
-                previous conditions, reports, medicines and important
-                health events.
+                MEDI-PASS organizes medical information into a clear timeline, helping doctors
+                quickly understand previous conditions, reports, medicines and vital events.
             </p>
-
-            <small>
-                AI features shown are a competition prototype concept.
-            </small>
-
+            <div style="margin-top: 15px;">
+                <a href="dashboard.html" class="card-button" style="text-decoration:none;display:inline-block;">
+                    ← Return to Dashboard
+                </a>
+            </div>
         </section>
 
     </main>
 
-</body>
+<script src="api.js"></script>
+<script>
+    async function loadAIMemoryPage() {
+        let aiData = null;
+        if (window.MediPassAPI && window.MediPassAPI.getToken()) {
+            try {
+                aiData = await window.MediPassAPI.aiMemory.get();
+            } catch (_) {}
+        }
+
+        const patient = JSON.parse(localStorage.getItem("mediPassPatient")) || {};
+        const meds = JSON.parse(localStorage.getItem("mediPassMedicines")) || [];
+        const reports = JSON.parse(localStorage.getItem("mediPassReports")) || [];
+
+        const totalCount = (aiData ? (aiData.totalMedicines + aiData.totalReports + aiData.totalVitals) : (meds.length + reports.length)) || 0;
+        const totalRecordsEl = document.getElementById("aiTotalRecords");
+        if (totalRecordsEl) totalRecordsEl.textContent = `${totalCount} Records Tracked`;
+
+        // Priority list
+        const priorityList = document.getElementById("aiPriorityList");
+        if (priorityList) {
+            let items = aiData && aiData.priorityChecklist ? aiData.priorityChecklist : [];
+            if (!items.length) {
+                if (patient.bloodGroup || patient.blood) items.push(`Blood Group: ${patient.bloodGroup || patient.blood}`);
+                if (patient.allergies) items.push(`Allergy Alert: ${patient.allergies}`);
+                if (patient.conditions) items.push(`Known Conditions: ${patient.conditions}`);
+                if (meds.length) items.push(`${meds.length} Active prescription medicines`);
+            }
+            if (!items.length) items = ["No critical medical alerts recorded yet."];
+
+            priorityList.innerHTML = items.map(it => `<li>✓ ${it}</li>`).join("");
+        }
+
+        // Summary text
+        const summaryTextEl = document.getElementById("aiSummaryText");
+        if (summaryTextEl) {
+            if (aiData && aiData.healthSummary) {
+                summaryTextEl.textContent = aiData.healthSummary;
+            } else {
+                summaryTextEl.textContent = `${patient.name || "This patient"} has an active MEDI-PASS profile with ${meds.length} recorded medications and ${reports.length} diagnostic documents organized for healthcare review.`;
+            }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadAIMemoryPage);
+    loadAIMemoryPage();
+</script>
 
 </html>

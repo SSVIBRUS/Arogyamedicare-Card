@@ -51,7 +51,7 @@
 
                 <h3>Blood Pressure</h3>
 
-                <strong>70/40</strong>
+                <strong id="vitalsBP">--</strong>
 
                 <p>mmHg</p>
 
@@ -64,7 +64,7 @@
 
                 <h3>Heart Rate</h3>
 
-                <strong>78</strong>
+                <strong id="vitalsHR">--</strong>
 
                 <p>BPM</p>
 
@@ -77,7 +77,7 @@
 
                 <h3>SpO₂</h3>
 
-                <strong>98%</strong>
+                <strong id="vitalsSpO2">--</strong>
 
                 <p>Oxygen Level</p>
 
@@ -90,7 +90,7 @@
 
                 <h3>Blood Sugar</h3>
 
-                <strong>96</strong>
+                <strong id="vitalsSugar">--</strong>
 
                 <p>mg/dL</p>
 
@@ -103,7 +103,7 @@
 
                 <h3>Temperature</h3>
 
-                <strong>36.8</strong>
+                <strong id="vitalsTemp">36.8</strong>
 
                 <p>°C</p>
 
@@ -116,7 +116,7 @@
 
                 <h3>Weight</h3>
 
-                <strong>65</strong>
+                <strong id="vitalsWeight">--</strong>
 
                 <p>kg</p>
 
@@ -174,21 +174,12 @@
         </section>
 
     </main>
-    </main>
 
+<script src="api.js"></script>
 <script>
-    const patientData =
-        JSON.parse(localStorage.getItem("mediPassPatient")) || {};
-
-    let vitalsHistory =
-        JSON.parse(localStorage.getItem("mediPassVitals")) || [];
-
-    const historyRows =
-        document.getElementById("vitalsHistoryRows");
-
     function formatDate(dateString) {
+        if (!dateString) return "--";
         const date = new Date(dateString);
-
         return date.toLocaleDateString("en-GB", {
             day: "2-digit",
             month: "short",
@@ -196,10 +187,40 @@
         });
     }
 
-    function showVitalsHistory() {
+    async function loadVitalsPage() {
+        let patient = JSON.parse(localStorage.getItem("mediPassPatient")) || {};
+        let vitalsHistory = JSON.parse(localStorage.getItem("mediPassVitals")) || [];
+
+        if (window.MediPassAPI && window.MediPassAPI.getToken()) {
+            try {
+                const [me, history] = await Promise.allSettled([
+                    window.MediPassAPI.auth.getMe(),
+                    window.MediPassAPI.vitals.getAll()
+                ]);
+                if (me.status === 'fulfilled' && me.value) patient = me.value;
+                if (history.status === 'fulfilled' && Array.isArray(history.value)) vitalsHistory = history.value;
+            } catch (_) {}
+        }
+
+        // Update cards
+        const bpEl = document.getElementById("vitalsBP");
+        const hrEl = document.getElementById("vitalsHR");
+        const spo2El = document.getElementById("vitalsSpO2");
+        const sugarEl = document.getElementById("vitalsSugar");
+        const weightEl = document.getElementById("vitalsWeight");
+
+        if (bpEl) bpEl.textContent = patient.bloodPressure || (vitalsHistory[0] ? vitalsHistory[0].bloodPressure : "--");
+        if (hrEl) hrEl.textContent = patient.heartRate || (vitalsHistory[0] ? vitalsHistory[0].heartRate : "--");
+        const spo2Val = patient.spo2 || (vitalsHistory[0] ? vitalsHistory[0].spo2 : null);
+        if (spo2El) spo2El.textContent = spo2Val ? (spo2Val + (String(spo2Val).includes('%') ? '' : '%')) : "--";
+        if (sugarEl) sugarEl.textContent = patient.bloodSugar || (vitalsHistory[0] ? vitalsHistory[0].bloodSugar : "--");
+        if (weightEl) weightEl.textContent = patient.weight || (vitalsHistory[0] ? vitalsHistory[0].weight : "--");
+
+        // History rows
+        const historyRows = document.getElementById("vitalsHistoryRows");
+        if (!historyRows) return;
 
         if (vitalsHistory.length === 0) {
-
             historyRows.innerHTML = `
                 <div class="history-row">
                     <span>No readings</span>
@@ -208,40 +229,30 @@
                     <span>--</span>
                 </div>
             `;
-
             return;
         }
 
         const sortedVitals = [...vitalsHistory].sort(
-            (a, b) => new Date(b.date) - new Date(a.date)
+            (a, b) => new Date(b.date || b.recorded_at || 0) - new Date(a.date || a.recorded_at || 0)
         );
 
         historyRows.innerHTML = "";
-
         sortedVitals.forEach(vital => {
-
             const row = document.createElement("div");
-
             row.className = "history-row";
-
             row.innerHTML = `
-                <span>${formatDate(vital.date)}</span>
+                <span>${formatDate(vital.date || vital.recorded_at)}</span>
                 <span>${vital.bloodPressure || "--"}</span>
                 <span>${vital.heartRate ? vital.heartRate + " BPM" : "--"}</span>
-                <span>${vital.spo2 ? vital.spo2 + "%" : "--"}</span>
+                <span>${vital.spo2 ? (vital.spo2 + (String(vital.spo2).includes('%') ? '' : '%')) : "--"}</span>
             `;
-
             historyRows.appendChild(row);
         });
     }
 
-    showVitalsHistory();
+    document.addEventListener("DOMContentLoaded", loadVitalsPage);
+    loadVitalsPage();
 </script>
-
-</body>
-
-</html>
-
 
 </body>
 

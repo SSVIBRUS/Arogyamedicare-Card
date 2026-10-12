@@ -383,497 +383,137 @@
 
 
 
-<!-- =========================================
-     JAVASCRIPT
-========================================= -->
-
+<script src="api.js"></script>
 <script>
+let localMedicines = JSON.parse(localStorage.getItem("mediPassMedicines")) || [];
 
-
-/* =========================================
-   LOAD MEDICINES
-========================================= */
-
-function getMedicines() {
-
-    return JSON.parse(
-        localStorage.getItem("mediPassMedicines")
-    ) || [];
-
+async function getMedicines() {
+    if (window.MediPassAPI && window.MediPassAPI.getToken()) {
+        try {
+            const list = await window.MediPassAPI.medicines.getAll();
+            if (Array.isArray(list)) {
+                localMedicines = list;
+                return list;
+            }
+        } catch (_) {}
+    }
+    return JSON.parse(localStorage.getItem("mediPassMedicines")) || [];
 }
 
-
-
-/* =========================================
-   SAVE MEDICINE
-========================================= */
-
-function saveMedicine() {
-
-
-    const name =
-        document.getElementById(
-            "medicineName"
-        ).value.trim();
-
-
-    const dose =
-        document.getElementById(
-            "medicineDose"
-        ).value.trim();
-
-
-    const frequency =
-        document.getElementById(
-            "medicineFrequency"
-        ).value;
-
-
-    const timing =
-        document.getElementById(
-            "medicineTiming"
-        ).value;
-
-
-    const startDate =
-        document.getElementById(
-            "medicineStartDate"
-        ).value;
-
-
-    const endDate =
-        document.getElementById(
-            "medicineEndDate"
-        ).value;
-
-
-    const reason =
-        document.getElementById(
-            "medicineReason"
-        ).value.trim();
-
-
-    const doctor =
-        document.getElementById(
-            "medicineDoctor"
-        ).value.trim();
-
-
-    const status =
-        document.getElementById(
-            "medicineStatus"
-        ).value;
-
-
-    const sideEffects =
-        document.getElementById(
-            "medicineSideEffects"
-        ).value.trim();
-
-
-
-    /* VALIDATION */
+async function saveMedicine() {
+    const name = document.getElementById("medicineName").value.trim();
+    const dose = document.getElementById("medicineDose").value.trim();
+    const frequency = document.getElementById("medicineFrequency").value;
+    const timing = document.getElementById("medicineTiming").value;
+    const startDate = document.getElementById("medicineStartDate").value;
+    const endDate = document.getElementById("medicineEndDate").value;
+    const reason = document.getElementById("medicineReason").value.trim();
+    const doctor = document.getElementById("medicineDoctor").value.trim();
+    const status = document.getElementById("medicineStatus").value;
+    const sideEffects = document.getElementById("medicineSideEffects").value.trim();
 
     if (!name) {
-
-        alert(
-            "Please enter medicine name."
-        );
-
+        alert("Please enter medicine name.");
         return;
-
     }
-
-
-
     if (!dose) {
-
-        alert(
-            "Please enter medicine dose."
-        );
-
+        alert("Please enter medicine dose.");
         return;
-
     }
 
-
-
-    /* MEDICINE OBJECT */
-
-    const medicine = {
-
-        id:
-            Date.now(),
-
-        name:
-            name,
-
-        dose:
-            dose,
-
-        frequency:
-            frequency,
-
-        timing:
-            timing,
-
-        startDate:
-            startDate,
-
-        endDate:
-            endDate,
-
-        reason:
-            reason,
-
-        doctor:
-            doctor,
-
-        status:
-            status,
-
-        sideEffects:
-            sideEffects,
-
-        createdAt:
-            new Date().toISOString()
-
+    const medicineObj = {
+        name,
+        dosage: dose,
+        dose,
+        frequency,
+        timing,
+        startDate,
+        endDate,
+        notes: [reason, doctor ? `Dr: ${doctor}` : '', sideEffects ? `Side effects: ${sideEffects}` : ''].filter(Boolean).join(' • '),
+        reason,
+        doctor,
+        status,
+        sideEffects,
+        createdAt: new Date().toISOString()
     };
 
-
-
-    /* GET OLD MEDICINES */
-
-    const medicines =
-        getMedicines();
-
-
-
-    /* ADD NEW */
-
-    medicines.push(
-        medicine
-    );
-
-
-
-    /* SAVE */
-
-    localStorage.setItem(
-
-        "mediPassMedicines",
-
-        JSON.stringify(
-            medicines
-        )
-
-    );
-
-
-
-    /* CLEAR FORM */
-
-    document.getElementById(
-        "medicineName"
-    ).value = "";
-
-
-    document.getElementById(
-        "medicineDose"
-    ).value = "";
-
-
-    document.getElementById(
-        "medicineFrequency"
-    ).value = "";
-
-
-    document.getElementById(
-        "medicineTiming"
-    ).value = "";
-
-
-    document.getElementById(
-        "medicineStartDate"
-    ).value = "";
-
-
-    document.getElementById(
-        "medicineEndDate"
-    ).value = "";
-
-
-    document.getElementById(
-        "medicineReason"
-    ).value = "";
-
-
-    document.getElementById(
-        "medicineDoctor"
-    ).value = "";
-
-
-    document.getElementById(
-        "medicineStatus"
-    ).value = "Current";
-
-
-    document.getElementById(
-        "medicineSideEffects"
-    ).value = "";
-
-
-
-    /* REFRESH */
-
-    displayMedicines();
-
-
-    alert(
-        "Medicine saved successfully."
-    );
-
-}
-
-
-
-/* =========================================
-   DELETE MEDICINE
-========================================= */
-
-function deleteMedicine(id) {
-
-
-    let medicines =
-        getMedicines();
-
-
-    medicines =
-        medicines.filter(
-            function(medicine) {
-
-                return medicine.id !== id;
-
-            }
-        );
-
-
-    localStorage.setItem(
-
-        "mediPassMedicines",
-
-        JSON.stringify(
-            medicines
-        )
-
-    );
-
-
-    displayMedicines();
-
-}
-
-
-
-/* =========================================
-   DISPLAY MEDICINES
-========================================= */
-
-function displayMedicines() {
-
-
-    const container =
-        document.getElementById(
-            "medicineList"
-        );
-
-
-    const medicines =
-        getMedicines();
-
-
-
-    /* EMPTY STATE */
-
-    if (medicines.length === 0) {
-
-        container.innerHTML = `
-
-            <div class="dashboard-card">
-
-                <div class="card-icon">
-                    💊
-                </div>
-
-                <h3>
-                    No Medicines Added
-                </h3>
-
-                <p>
-                    Add a medicine above to create
-                    your medication record.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
+    if (window.MediPassAPI && window.MediPassAPI.getToken()) {
+        try {
+            await window.MediPassAPI.medicines.add(medicineObj);
+        } catch (e) {
+            console.warn("API add medicine notice:", e);
+        }
     }
 
+    localMedicines.push({ ...medicineObj, id: Date.now() });
+    localStorage.setItem("mediPassMedicines", JSON.stringify(localMedicines));
 
+    // Clear form
+    document.getElementById("medicineName").value = "";
+    document.getElementById("medicineDose").value = "";
+    document.getElementById("medicineFrequency").value = "";
+    document.getElementById("medicineTiming").value = "";
+    document.getElementById("medicineStartDate").value = "";
+    document.getElementById("medicineEndDate").value = "";
+    document.getElementById("medicineReason").value = "";
+    document.getElementById("medicineDoctor").value = "";
+    document.getElementById("medicineStatus").value = "Current";
+    document.getElementById("medicineSideEffects").value = "";
 
-    /* SHOW MEDICINES */
-
-    container.innerHTML = "";
-
-
-
-    medicines
-        .slice()
-        .reverse()
-        .forEach(
-            function(medicine) {
-
-
-                const card =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                card.className =
-                    "dashboard-card";
-
-
-
-                card.innerHTML = `
-
-                    <div class="card-icon">
-                        💊
-                    </div>
-
-
-                    <h3>
-                        ${medicine.name}
-                    </h3>
-
-
-                    <p>
-                        <strong>
-                            Dose:
-                        </strong>
-
-                        ${medicine.dose}
-                    </p>
-
-
-                    <p>
-                        <strong>
-                            Frequency:
-                        </strong>
-
-                        ${medicine.frequency || "Not recorded"}
-                    </p>
-
-
-                    <p>
-                        <strong>
-                            Timing:
-                        </strong>
-
-                        ${medicine.timing || "Not recorded"}
-                    </p>
-
-
-                    <p>
-                        <strong>
-                            Reason:
-                        </strong>
-
-                        ${medicine.reason || "Not recorded"}
-                    </p>
-
-
-                    <p>
-                        <strong>
-                            Doctor:
-                        </strong>
-
-                        ${medicine.doctor || "Not recorded"}
-                    </p>
-
-
-                    <p>
-                        <strong>
-                            Start:
-                        </strong>
-
-                        ${medicine.startDate || "Not recorded"}
-                    </p>
-
-
-                    <p>
-                        <strong>
-                            End:
-                        </strong>
-
-                        ${medicine.endDate || "Not recorded"}
-                    </p>
-
-
-                    <p>
-                        <strong>
-                            Status:
-                        </strong>
-
-                        ${medicine.status}
-                    </p>
-
-
-                    <p>
-                        <strong>
-                            Side Effects:
-                        </strong>
-
-                        ${medicine.sideEffects || "None recorded"}
-                    </p>
-
-
-                    <button
-                        class="secondary-btn"
-                        onclick="deleteMedicine(${medicine.id})">
-
-                        🗑️ Delete
-
-                    </button>
-
-                `;
-
-
-                container.appendChild(
-                    card
-                );
-
-            }
-        );
-
+    await displayMedicines();
+    alert("Medicine saved successfully.");
 }
 
+async function deleteMedicine(id) {
+    if (window.MediPassAPI && window.MediPassAPI.getToken()) {
+        try {
+            await window.MediPassAPI.medicines.delete(id);
+        } catch (_) {}
+    }
 
+    localMedicines = localMedicines.filter(m => m.id != id);
+    localStorage.setItem("mediPassMedicines", JSON.stringify(localMedicines));
+    await displayMedicines();
+}
 
-/* =========================================
-   INITIAL LOAD
-========================================= */
+async function displayMedicines() {
+    const container = document.getElementById("medicineList");
+    const medicines = await getMedicines();
 
+    if (medicines.length === 0) {
+        container.innerHTML = `
+            <div class="dashboard-card">
+                <div class="card-icon">💊</div>
+                <h3>No Medicines Added</h3>
+                <p>Add a medicine above to create your medication record.</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = "";
+    medicines.slice().reverse().forEach(function(medicine) {
+        const card = document.createElement("div");
+        card.className = "dashboard-card";
+        card.innerHTML = `
+            <div class="card-icon">💊</div>
+            <h3>${medicine.name}</h3>
+            <p><strong>Dose:</strong> ${medicine.dosage || medicine.dose || "--"}</p>
+            <p><strong>Frequency:</strong> ${medicine.frequency || "Not recorded"}</p>
+            <p><strong>Timing:</strong> ${medicine.timing || "Not recorded"}</p>
+            <p><strong>Reason:</strong> ${medicine.reason || medicine.notes || "Not recorded"}</p>
+            <p><strong>Start:</strong> ${medicine.startDate || "Not recorded"}</p>
+            <p><strong>End:</strong> ${medicine.endDate || "Not recorded"}</p>
+            <button class="secondary-btn" onclick="deleteMedicine(${medicine.id})">🗑️ Delete</button>
+        `;
+        container.appendChild(card);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", displayMedicines);
 displayMedicines();
-
-
 </script>
-
 
 </body>
 
 </html>
-```
