@@ -1,0 +1,469 @@
+/* ==========================================================================
+   MEDI-PASS - THEME SYSTEM (DARK & LIGHT MODE)
+   Top-Right Theme Toggle & Cohesive Dark Theme Overrides
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. TOP RIGHT CORNER THEME TOGGLE BUTTON
+   -------------------------------------------------------------------------- */
+.theme-toggle-btn {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 999999;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1px solid #d0d7de;
+    background: rgba(255, 255, 255, 0.92);
+    color: #0f172a;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    -webkit-user-select: none;
+    font-family: inherit;
+    line-height: 1;
+}
+
+.theme-toggle-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(8, 126, 164, 0.18);
+    border-color: #087ea4;
+    color: #087ea4;
+}
+
+.theme-toggle-btn:active {
+    transform: translateY(0);
+}
+
+.theme-toggle-btn .theme-icon {
+    font-size: 15px;
+    line-height: 1;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle-btn:hover .theme-icon {
+    transform: rotate(18deg) scale(1.1);
+}
+
+.theme-toggle-btn .theme-text {
+    font-size: 12.5px;
+    letter-spacing: 0.3px;
+    font-weight: 700;
+}
+
+/* Dark Mode State of the Toggle Button */
+.dark-theme .theme-toggle-btn {
+    background: rgba(19, 29, 49, 0.92);
+    border-color: #334155;
+    color: #f8fafc;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(56, 189, 248, 0.15);
+}
+
+.dark-theme .theme-toggle-btn:hover {
+    border-color: #38bdf8;
+    color: #38bdf8;
+    box-shadow: 0 6px 22px rgba(56, 189, 248, 0.28);
+}
+
+/* --------------------------------------------------------------------------
+   2. DARK THEME BASE & FOUNDATIONS
+   -------------------------------------------------------------------------- */
+html.dark-theme,
+body.dark-theme {
+    background-color: #0b1120 !important;
+    color: #e2e8f0 !important;
+}
+
+.dark-theme {
+    color-scheme: dark;
+}
+
+/* Base typography */
+.dark-theme h1,
+.dark-theme h2,
+.dark-theme h3,
+.dark-theme h4,
+.dark-theme h5,
+.dark-theme h6,
+.dark-theme strong,
+.dark-theme b {
+    color: #f8fafc !important;
+}
+
+.dark-theme p,
+.dark-theme span:not(.logo span):not(.badge):not(.status-pill):not(.timeline-marker):not(.theme-icon),
+.dark-theme small,
+.dark-theme label,
+.dark-theme li {
+    color: #94a3b8;
+}
+
+.dark-theme a {
+    color: #38bdf8;
+}
+
+/* --------------------------------------------------------------------------
+   3. NAVIGATION & HEADERS
+   -------------------------------------------------------------------------- */
+.dark-theme .navbar,
+.dark-theme header.navbar {
+    background: #10192d !important;
+    border-bottom: 1px solid #1e293b !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+.dark-theme .logo {
+    color: #38bdf8 !important;
+}
+
+.dark-theme .logo span {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+}
+
+.dark-theme .navbar nav a,
+.dark-theme nav a {
+    color: #94a3b8 !important;
+}
+
+.dark-theme .navbar nav a:hover,
+.dark-theme nav a:hover {
+    color: #38bdf8 !important;
+}
+
+.dark-theme .login-btn {
+    background: #1e293b !important;
+    color: #38bdf8 !important;
+    border: 1px solid #0284c7 !important;
+}
+
+.dark-theme .login-btn:hover {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+}
+
+.dark-theme .back-button {
+    background: #1e293b !important;
+    color: #e2e8f0 !important;
+    border: 1px solid #334155 !important;
+}
+
+.dark-theme .back-button:hover {
+    background: #334155 !important;
+    color: #ffffff !important;
+}
+
+.dark-theme .back-home {
+    color: #38bdf8 !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. USER PROFILE & DROPDOWNS
+   -------------------------------------------------------------------------- */
+.dark-theme .profile-btn {
+    background: #1e293b !important;
+    color: #38bdf8 !important;
+    border: 1px solid #334155 !important;
+}
+
+.dark-theme .profile-btn:hover {
+    background: #243452 !important;
+    border-color: #38bdf8 !important;
+}
+
+.dark-theme .profile-dropdown {
+    background: #131d31 !important;
+    border: 1px solid #243452 !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55) !important;
+}
+
+.dark-theme .profile-top {
+    border-bottom: 1px solid #243452 !important;
+}
+
+.dark-theme .profile-avatar {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+}
+
+.dark-theme .profile-info strong,
+.dark-theme #profileName {
+    color: #f8fafc !important;
+}
+
+.dark-theme .profile-info small,
+.dark-theme #profileEmail {
+    color: #94a3b8 !important;
+}
+
+.dark-theme .logout-btn {
+    background: rgba(239, 68, 68, 0.12) !important;
+    color: #f87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+
+.dark-theme .logout-btn:hover {
+    background: rgba(239, 68, 68, 0.22) !important;
+    color: #fca5a5 !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. HERO & SECTIONS
+   -------------------------------------------------------------------------- */
+.dark-theme .hero {
+    background: transparent !important;
+}
+
+.dark-theme .badge {
+    background: rgba(14, 165, 233, 0.16) !important;
+    color: #38bdf8 !important;
+    border: 1px solid rgba(56, 189, 248, 0.25) !important;
+}
+
+.dark-theme .hero h1 {
+    color: #f8fafc !important;
+}
+
+.dark-theme .hero h1 span {
+    color: #38bdf8 !important;
+}
+
+.dark-theme .hero p {
+    color: #94a3b8 !important;
+}
+
+.dark-theme .secondary-btn {
+    background: #1e293b !important;
+    color: #38bdf8 !important;
+    border: 1px solid #334155 !important;
+}
+
+.dark-theme .secondary-btn:hover {
+    background: #243452 !important;
+    border-color: #38bdf8 !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. CARDS, CONTAINERS & BOXES
+   -------------------------------------------------------------------------- */
+.dark-theme .medical-card,
+.dark-theme .detail-card,
+.dark-theme .dashboard-card,
+.dark-theme .feature-dashboard-card,
+.dark-theme .info-box,
+.dark-theme .detail-box,
+.dark-theme .record-card,
+.dark-theme .vital-card,
+.dark-theme .vital-detail-card,
+.dark-theme .vital-note,
+.dark-theme .form-section,
+.dark-theme .login-container,
+.dark-theme .timeline-card,
+.dark-theme .timeline-content,
+.dark-theme .timeline-summary div,
+.dark-theme .smart-timeline-item .timeline-content,
+.dark-theme .critical-card,
+.dark-theme .report-item,
+.dark-theme .card,
+.dark-theme .patient-card,
+.dark-theme .medicine-card {
+    background: #131d31 !important;
+    border-color: #243452 !important;
+    color: #f1f5f9 !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark-theme .features,
+.dark-theme .feature-detail,
+.dark-theme .login-page,
+.dark-theme .vitals-page,
+.dark-theme .vitals-header,
+.dark-theme .feature-form,
+.dark-theme .report-form {
+    background: transparent !important;
+}
+
+.dark-theme .feature-form,
+.dark-theme .report-form {
+    background: #131d31 !important;
+    border: 1px solid #243452 !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. INPUTS, SELECTS, FORMS
+   -------------------------------------------------------------------------- */
+.dark-theme input,
+.dark-theme select,
+.dark-theme textarea,
+.dark-theme .report-field input,
+.dark-theme .report-field select,
+.dark-theme .form-group input,
+.dark-theme .form-group select,
+.dark-theme .form-group textarea {
+    background: #0b1120 !important;
+    border: 1px solid #334155 !important;
+    color: #f8fafc !important;
+}
+
+.dark-theme input:focus,
+.dark-theme select:focus,
+.dark-theme textarea:focus,
+.dark-theme .report-field input:focus,
+.dark-theme .report-field select:focus {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22) !important;
+}
+
+.dark-theme input::placeholder,
+.dark-theme textarea::placeholder {
+    color: #64748b !important;
+}
+
+/* --------------------------------------------------------------------------
+   8. ALERTS, WARNINGS & CRITICAL BANNERS
+   -------------------------------------------------------------------------- */
+.dark-theme .warning,
+.dark-theme .alert-box,
+.dark-theme .danger-box,
+.dark-theme .critical-card.alert {
+    background: rgba(220, 38, 38, 0.12) !important;
+    border-color: #ef4444 !important;
+    color: #fca5a5 !important;
+}
+
+.dark-theme .alert-detail {
+    background: rgba(239, 68, 68, 0.12) !important;
+    border-color: #ef4444 !important;
+}
+
+.dark-theme .ai-priority-box {
+    background: rgba(239, 68, 68, 0.1) !important;
+    border-color: #ef4444 !important;
+}
+
+.dark-theme .ai-priority-box li {
+    color: #fca5a5 !important;
+}
+
+.dark-theme .danger-btn,
+.dark-theme .report-delete-btn {
+    background: rgba(239, 68, 68, 0.14) !important;
+    border-color: rgba(239, 68, 68, 0.4) !important;
+    color: #f87171 !important;
+}
+
+.dark-theme .danger-btn:hover,
+.dark-theme .report-delete-btn:hover {
+    background: rgba(239, 68, 68, 0.24) !important;
+    color: #fca5a5 !important;
+}
+
+.dark-theme .emergency-secondary-btn {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+/* --------------------------------------------------------------------------
+   9. TABLES, HISTORY, STATUS & BADGES
+   -------------------------------------------------------------------------- */
+.dark-theme .history-table,
+.dark-theme .history-row {
+    border-color: #243452 !important;
+}
+
+.dark-theme .history-heading {
+    background: #0b1120 !important;
+    color: #94a3b8 !important;
+}
+
+.dark-theme .history-row span {
+    color: #e2e8f0 !important;
+}
+
+.dark-theme .report-detail {
+    background: #0b1120 !important;
+    border: 1px solid #243452 !important;
+    color: #cbd5e1 !important;
+}
+
+.dark-theme .status-pill {
+    background: rgba(34, 197, 94, 0.18) !important;
+    color: #4ade80 !important;
+}
+
+.dark-theme .empty-state,
+.dark-theme .report-empty {
+    background: #131d31 !important;
+    border-color: #334155 !important;
+    color: #94a3b8 !important;
+}
+
+.dark-theme .share-code {
+    background: #1a2744 !important;
+    color: #38bdf8 !important;
+    border: 1px dashed #38bdf8 !important;
+}
+
+.dark-theme .report-view-btn {
+    background: #1a2744 !important;
+    color: #38bdf8 !important;
+}
+
+.dark-theme .report-cancel-btn {
+    background: #1e293b !important;
+    color: #94a3b8 !important;
+}
+
+/* --------------------------------------------------------------------------
+   10. TIMELINE & FOOTER
+   -------------------------------------------------------------------------- */
+.dark-theme .timeline-current {
+    color: #4ade80 !important;
+}
+
+.dark-theme .smart-timeline::before {
+    background: #334155 !important;
+}
+
+.dark-theme .timeline-marker {
+    background: #1e293b !important;
+    border-color: #38bdf8 !important;
+}
+
+.dark-theme footer {
+    background: #0a0f1d !important;
+    border-top: 1px solid #1e293b !important;
+    color: #64748b !important;
+}
+
+.dark-theme footer a {
+    color: #94a3b8 !important;
+}
+
+.dark-theme footer a:hover {
+    color: #38bdf8 !important;
+}
+
+/* --------------------------------------------------------------------------
+   11. RESPONSIVENESS & ACCESSIBILITY
+   -------------------------------------------------------------------------- */
+@media (max-width: 650px) {
+    .theme-toggle-btn {
+        top: 14px;
+        right: 14px;
+        padding: 6px 10px;
+    }
+    .theme-toggle-btn .theme-text {
+        display: none;
+    }
+}
